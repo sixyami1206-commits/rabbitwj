@@ -3,162 +3,379 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>INDO ShoppingPro</title>
+    <title>INDO ShoppingPro | タイムセール</title>
     <style>
-        body { font-family: sans-serif; background: #f8f9fa; margin: 0; padding: 20px; color: #333; }
-        header, footer { background: #0056b3; color: white; padding: 15px; text-align: center; border-radius: 8px; }
-        .container { display: grid; grid-template-columns: 2fr 1fr; gap: 20px; margin-top: 20px; }
-        @media (max-width: 768px) { .container { grid-template-columns: 1fr; } }
-        .categories { margin-bottom: 15px; }
-        .category-btn { padding: 6px 12px; margin-right: 5px; border: 1px solid #ccc; background: white; cursor: pointer; border-radius: 4px; }
-        .category-btn.active { background: #0056b3; color: white; }
-        .product-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 15px; }
-        .product-card { background: white; border: 1px solid #ddd; border-radius: 8px; padding: 15px; display: flex; flex-direction: column; justify-content: space-between; }
-        .badge { background: #ff3b30; color: white; font-size: 11px; padding: 2px 6px; border-radius: 4px; width: fit-content; }
-        .original-price { text-decoration: line-through; color: #888; font-size: 13px; margin-right: 5px; }
-        .discount-price { color: #ff3b30; font-weight: bold; font-size: 18px; }
-        .sidebar { background: white; padding: 20px; border: 1px solid #ddd; border-radius: 8px; height: fit-content; }
-        .cart-item { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid #eee; font-size: 14px; }
-        .cart-item-remove { color: #ff3b30; cursor: pointer; border: none; background: none; }
-        .price-summary { margin: 15px 0; border-top: 1px solid #ddd; padding-top: 10px; }
-        .price-row { display: flex; justify-content: space-between; margin-bottom: 5px; }
-        .total-row { font-size: 18px; font-weight: bold; color: #ff3b30; }
-        .order-form { display: flex; flex-direction: column; gap: 10px; margin-top: 15px; }
-        .order-form input, .order-form textarea { padding: 8px; border: 1px solid #ccc; border-radius: 4px; }
-        button.action-btn { background: #0056b3; color: white; border: none; padding: 8px; border-radius: 4px; cursor: pointer; font-weight: bold; }
-        button.submit-btn { background: #28a745; width: 100%; padding: 12px; }
-        table { width: 100%; font-size: 14px; margin-top: 10px; }
-        table td { padding: 5px 0; border-bottom: 1px solid #eee; }
+        :root {
+            --primary: #ff5722;
+            --accent: #d32f2f;
+            --bg: #f5f5f7;
+            --card: #ffffff;
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Meiryo, sans-serif; }
+        body { background: var(--bg); color: #333; padding-bottom: 50px; }
+
+        /* ガチ通販風ヘッダー */
+        header {
+            background: #fff;
+            border-bottom: 2px solid var(--primary);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+        .header-inner {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 15px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .logo { font-size: 24px; font-weight: 900; color: var(--primary); text-decoration: none; }
+        
+        /* タイムセールカウンター（15分） */
+        .timer-bar {
+            background: linear-gradient(90deg, var(--accent), var(--primary));
+            color: #fff;
+            text-align: center;
+            padding: 10px;
+            font-weight: bold;
+            font-size: 16px;
+        }
+        .timer-bar span { background: #000; color: #fff; padding: 3px 6px; border-radius: 4px; margin: 0 3px; font-family: monospace; }
+
+        /* ナビゲーション */
+        .nav-shortcuts {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin: 15px auto;
+            max-width: 1200px;
+            padding: 0 20px;
+        }
+        .btn-shortcut {
+            flex: 1;
+            background: #fff;
+            border: 1px solid #ddd;
+            padding: 10px;
+            font-size: 13px;
+            font-weight: bold;
+            cursor: pointer;
+            border-radius: 6px;
+            text-align: center;
+            transition: 0.2s;
+        }
+        .btn-shortcut:hover { border-color: var(--primary); color: var(--primary); }
+
+        /* メインレイアウト */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 20px;
+        }
+        @media (min-width: 900px) {
+            .container { grid-template-columns: 2fr 1fr; }
+        }
+
+        /* 商品グリッド */
+        .product-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+            gap: 15px;
+        }
+        .product-card {
+            background: var(--card);
+            border-radius: 8px;
+            border: 1px solid #e0e0e0;
+            padding: 12px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        .product-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        .badge {
+            background: var(--accent);
+            color: #fff;
+            font-size: 11px;
+            font-weight: bold;
+            padding: 2px 6px;
+            border-radius: 4px;
+            width: fit-content;
+            margin-bottom: 8px;
+        }
+        .product-name { font-size: 14px; font-weight: bold; line-height: 1.4; height: 40px; overflow: hidden; margin-bottom: 10px; }
+        .price-box { margin-bottom: 12px; }
+        .original-price { text-decoration: line-through; color: #999; font-size: 12px; }
+        .discount-price { color: var(--accent); font-size: 20px; font-weight: 800; display: block; }
+        
+        .add-btn {
+            background: var(--primary);
+            color: #fff;
+            border: none;
+            padding: 8px;
+            font-size: 13px;
+            font-weight: bold;
+            cursor: pointer;
+            width: 100%;
+            border-radius: 4px;
+            transition: background 0.2s;
+        }
+        .add-btn:hover { background: #e64a19; }
+        .add-btn.added { background: #4caf50 !important; }
+
+        /* カート＆お届け先 (サイドバー) */
+        .sidebar {
+            background: var(--card);
+            border: 1px solid #e0e0e0;
+            padding: 20px;
+            border-radius: 8px;
+            height: fit-content;
+        }
+        .sidebar h3 { font-size: 18px; border-bottom: 2px solid #333; padding-bottom: 8px; margin-bottom: 15px; }
+        .cart-item { display: flex; justify-content: space-between; align-items: center; font-size: 13px; padding: 8px 0; border-bottom: 1px dashed #eee; }
+        .remove-btn { background: none; border: none; color: #999; cursor: pointer; font-size: 14px; }
+        .remove-btn:hover { color: var(--accent); }
+        
+        .totals { background: #f9f9f9; padding: 12px; margin: 15px 0; border-radius: 6px; font-size: 14px; }
+        .total-row { font-size: 18px; font-weight: bold; color: var(--accent); margin-top: 6px; border-top: 1px solid #ddd; padding-top: 6px; }
+
+        .order-form { display: flex; flex-direction: column; gap: 10px; }
+        .order-form input, .order-form textarea { width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 4px; font-size: 13px; }
+        .order-form input:focus, .order-form textarea:focus { border-color: var(--primary); outline: none; }
+        
+        .btn-buy {
+            background: var(--accent);
+            color: #fff;
+            border: none;
+            font-size: 16px;
+            font-weight: bold;
+            padding: 14px;
+            cursor: pointer;
+            border-radius: 6px;
+            width: 100%;
+            margin-top: 10px;
+            transition: opacity 0.2s;
+        }
+        .btn-buy:hover { opacity: 0.9; }
+
+        /* 注文確定後の大画面表示 */
+        #success-screen {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; width: 100vw; height: 100vh;
+            background: #fff;
+            color: #333;
+            z-index: 9999;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+        }
+        #success-screen h1 { font-size: 36px; color: #4caf50; margin-bottom: 20px; }
+        #success-screen button { background: #333; color: #fff; border: none; padding: 10px 20px; font-size: 16px; border-radius: 4px; cursor: pointer; }
+
+        /* 会社概要 */
+        footer { background: #333; color: #fff; padding: 30px 20px; margin-top: 40px; }
+        .footer-inner { max-width: 1200px; margin: 0 auto; }
+        .footer-inner h3 { color: var(--primary); font-size: 18px; margin-bottom: 15px; }
+        .footer-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+        .footer-table td { padding: 8px; border-bottom: 1px solid #444; }
+        .footer-table td:first-child { color: #aaa; width: 120px; font-weight: bold; }
     </style>
 </head>
 <body>
 
+    <div id="success-screen">
+        <h1>注文確定しました！</h1>
+        <button onclick="location.reload()">お買い物を続ける</button>
+    </div>
+
+    <div class="timer-bar">
+        ⚡ タイムセール終了まであと <span id="timer-min">15</span> 分 <span id="timer-sec">00</span> 秒 ⚡
+    </div>
+
     <header>
-        <h1>INDO ShoppingPro</h1>
-        <p>🎉 創立記念セール！対象商品40%OFF！海外発送も対応！</p>
+        <div class="header-inner">
+            <a href="#" class="logo">INDO ShoppingPro</a>
+            <div style="font-size: 14px; font-weight: bold;">🛒 カート金額: <span id="header-total" style="color: var(--accent);">0</span>円</div>
+        </div>
     </header>
+
+    <div class="nav-shortcuts">
+        <button class="btn-shortcut" onclick="scrollToId('footer-section')">🏢 会社概要</button>
+        <button class="btn-shortcut" onclick="scrollToId('cart-section')">🛒 カートを見る</button>
+        <button class="btn-shortcut" onclick="scrollToId('order-form')">💸 購入手続き</button>
+    </div>
 
     <div class="container">
         <main>
-            <div class="categories">
-                <button class="category-btn active" onclick="filterCategory('all')">すべて</button>
-                <button class="category-btn" onclick="filterCategory('gadget')">ガジェット</button>
-                <button class="category-btn" onclick="filterCategory('life')">生活雑貨</button>
-            </div>
-            <div class="product-grid" id="product-list"></div>
+            <div class="product-grid" id="product-grid"></div>
         </main>
 
-        <aside class="sidebar">
-            <h3>🛒 カート</h3>
-            <div id="cart-items"><p style="color: #888; text-align: center;">カートは空です</p></div>
-
-            <div class="price-summary">
-                <div class="price-row"><span>小計:</span><span><span id="subtotal">0</span>円</span></div>
-                <div class="price-row"><span>送料一律:</span><span><span id="shipping">0</span>円</span></div>
-                <div class="price-row total-row"><span>合計:</span><span><span id="total-price">0</span>円</span></div>
+        <aside class="sidebar" id="cart-section">
+            <h3>🛒 カートの中身</h3>
+            <div id="cart-items">
+                <p style="color: #999; text-align: center; padding: 15px 0;">カートは空です</p>
             </div>
 
-            <h3>📋 お届け先入力</h3>
+            <div class="totals">
+                <div style="display: flex; justify-content: space-between;"><span>小計:</span><span><span id="subtotal">0</span>円</span></div>
+                <div style="display: flex; justify-content: space-between; margin-top: 4px;"><span>配送料:</span><span><span id="shipping">0</span>円</span></div>
+                <div class="total-row" style="display: flex; justify-content: space-between;"><span>合計金額:</span><span><span id="total-price">0</span>円</span></div>
+            </div>
+
+            <h3>📋 お届け先情報</h3>
             <form class="order-form" id="order-form" onsubmit="submitOrder(event)">
                 <input type="text" id="username" required placeholder="お名前">
                 <input type="text" id="zipcode" required placeholder="郵便番号">
                 <textarea id="address" rows="2" required placeholder="ご住所"></textarea>
-                <div style="font-size: 12px; color: #ff3b30;">※お支払いは「代引きのみ」対応しています。</div>
-                <button type="submit" class="action-btn submit-btn">注文を確定する (代引き)</button>
+                <div style="font-size: 11px; color: var(--accent); font-weight: bold;">※お支払いは「代金引換（代引き）」のみです。</div>
+                <button type="submit" class="btn-buy">注文確定する</button>
             </form>
         </aside>
     </div>
 
-    <footer style="margin-top: 30px; text-align: left;">
-        <h3>🏢 会社概要</h3>
-        <table>
-            <tr><td>創立者</td><td>栗田拓実</td></tr>
-            <tr><td>創立日</td><td>2026/7/15</td></tr>
-            <tr><td>メッセージ</td><td>皆様に40%OFFの商品を体験してほしいです！海外のかたも、ぜひ！</td></tr>
-            <tr><td>送料</td><td>一律 300円</td></tr>
-            <tr><td>発送所</td><td>China</td></tr>
-            <tr><td>返金方法</td><td>PayPay、PayPal (電子クレジット)</td></tr>
-        </table>
+    <footer id="footer-section">
+        <div class="footer-inner">
+            <h3>🏢 会社概要 (About Us)</h3>
+            <table class="footer-table">
+                <tr><td>創立者</td><td>栗田拓実</td></tr>
+                <tr><td>創立日</td><td>2026/7/15</td></tr>
+                <tr><td>メッセージ</td><td>皆様に40%OFFの商品を体験してほしいです！海外のかたも、ぜひ、</td></tr>
+                <tr><td>送料一律</td><td>300円</td></tr>
+                <tr><td>発送所</td><td>China</td></tr>
+                <tr><td>返金方法</td><td>PayPay、PayPal（電子クレジット）</td></tr>
+            </table>
+        </div>
     </footer>
 
     <script>
+        // 激得20商品データベース
         const products = [
-            { id: 1, name: "ワイヤレスイヤホン", originalPrice: 2900, price: Math.floor(2900 * 0.6), category: "gadget", badge: "40% OFF" },
-            { id: 2, name: "ポータブルファン", originalPrice: 1900, price: Math.floor(1900 * 0.6), category: "life", badge: "40% OFF" },
-            { id: 3, name: "モバイルバッテリー", originalPrice: 3500, price: 2000, category: "gadget", badge: "目玉特価" },
-            { id: 4, name: "スマートマグカップ", originalPrice: 4000, price: Math.floor(4000 * 0.6), category: "life", badge: "40% OFF" }
+            { id: 1, name: "ワイヤレスイヤホン", oPrice: 2900, price: Math.floor(2900 * 0.6) },
+            { id: 2, name: "ポータブルファン", oPrice: 1900, price: Math.floor(1900 * 0.6) },
+            { id: 3, name: "大容量モバイルバッテリー", oPrice: 3500, price: 2000 },
+            { id: 4, name: "スマートウォッチ 2026", oPrice: 8000, price: Math.floor(8000 * 0.6) },
+            { id: 5, name: "急速充電ACアダプター", oPrice: 2200, price: Math.floor(2200 * 0.6) },
+            { id: 6, name: "骨伝導ワイヤレスイヤホン", oPrice: 4500, price: Math.floor(4500 * 0.6) },
+            { id: 7, name: "卓上USBミニ加湿器", oPrice: 1800, price: Math.floor(1800 * 0.6) },
+            { id: 8, name: "三脚付き自撮り棒", oPrice: 2500, price: Math.floor(2500 * 0.6) },
+            { id: 9, name: "防滴Bluetoothスピーカー", oPrice: 3900, price: Math.floor(3900 * 0.6) },
+            { id: 10, name: "高耐久Type-Cケーブル 2m", oPrice: 1000, price: Math.floor(1000 * 0.6) },
+            { id: 11, name: "アルミスマホスタンド", oPrice: 1500, price: Math.floor(1500 * 0.6) },
+            { id: 12, name: "車載スマホホルダー (吸盤式)", oPrice: 1980, price: Math.floor(1980 * 0.6) },
+            { id: 13, name: "コンパクトハンディクリーナー", oPrice: 4900, price: Math.floor(4900 * 0.6) },
+            { id: 14, name: "スマートタグ (紛失防止)", oPrice: 2000, price: Math.floor(2000 * 0.6) },
+            { id: 15, name: "ワイヤレス静音マウス", oPrice: 1600, price: Math.floor(1600 * 0.6) },
+            { id: 16, name: "スリムアルミカードケース", oPrice: 1200, price: Math.floor(1200 * 0.6) },
+            { id: 17, name: "超吸水速乾バスマット", oPrice: 2600, price: Math.floor(2600 * 0.6) },
+            { id: 18, name: "人感LEDセンサーライト", oPrice: 3200, price: Math.floor(3200 * 0.6) },
+            { id: 19, name: "吊り下げ式トラベルポーチ", oPrice: 1500, price: Math.floor(1500 * 0.6) },
+            { id: 20, name: "多機能マルチツールペン", oPrice: 1400, price: Math.floor(1400 * 0.6) }
         ];
 
         let cart = [];
         const shippingFee = 300;
 
-        function renderProducts(filter = 'all') {
-            const grid = document.getElementById('product-list');
-            grid.innerHTML = '';
-            const filtered = filter === 'all' ? products : products.filter(p => p.category === filter);
-            filtered.forEach(p => {
-                grid.innerHTML += `
-                    <div class="product-card">
-                        <div>
-                            <span class="badge">${p.badge}</span>
-                            <h4 style="margin: 8px 0;">${p.name}</h4>
-                        </div>
-                        <div>
-                            <div style="margin-bottom:10px;">
-                                <span class="original-price">${p.originalPrice}円</span>
-                                <span class="discount-price">${p.price}円</span>
-                            </div>
-                            <button class="action-btn" style="width:100%;" onclick="addToCart(${p.id})">カートに追加</button>
-                        </div>
+        // 20商品を描画
+        function renderProducts() {
+            const grid = document.getElementById('product-grid');
+            grid.innerHTML = products.map(p => `
+                <div class="product-card">
+                    <div>
+                        <span class="badge">40% OFF</span>
+                        <div class="product-name">${p.name}</div>
                     </div>
-                `;
-            });
+                    <div>
+                        <div class="price-box">
+                            <span class="original-price">${p.oPrice}円</span>
+                            <span class="discount-price">${p.price}円</span>
+                        </div>
+                        <button class="add-btn" id="add-btn-${p.id}" onclick="addToCart(${p.id})">カートに追加</button>
+                    </div>
+                </div>
+            `).join('');
         }
 
-        function filterCategory(category) {
-            document.querySelectorAll('.category-btn').forEach(btn => btn.classList.remove('active'));
-            event.target.classList.add('active');
-            renderProducts(category);
-        }
-
+        // カートへ追加
         function addToCart(productId) {
             const product = products.find(p => p.id === productId);
             const item = cart.find(i => i.id === productId);
             if (item) { item.quantity++; } else { cart.push({ ...product, quantity: 1 }); }
+
+            // ボタン変更アクション
+            const btn = document.getElementById(`add-btn-${productId}`);
+            btn.textContent = "カートに追加しました！追加";
+            btn.classList.add('added');
+            setTimeout(() => { btn.textContent = "カートに追加"; btn.classList.remove('added'); }, 1200);
+
             updateCart();
         }
 
+        // カートから削除
         function removeFromCart(productId) {
             cart = cart.filter(i => i.id !== productId);
             updateCart();
         }
 
+        // カート・合計の更新
         function updateCart() {
             const list = document.getElementById('cart-items');
             if (cart.length === 0) {
-                list.innerHTML = '<p style="color: #888; text-align: center;">カートは空です</p>';
+                list.innerHTML = '<p style="color: #999; text-align: center; padding: 15px 0;">カートは空です</p>';
                 document.getElementById('subtotal').textContent = 0;
                 document.getElementById('shipping').textContent = 0;
                 document.getElementById('total-price').textContent = 0;
+                document.getElementById('header-total').textContent = 0;
                 return;
             }
-            list.innerHTML = '';
-            let subtotal = 0;
-            cart.forEach(item => {
-                subtotal += item.price * item.quantity;
-                list.innerHTML += `
-                    <div class="cart-item">
-                        <span>${item.name} (${item.quantity})</span>
-                        <span>${(item.price * item.quantity)}円 <button class="cart-item-remove" onclick="removeFromCart(${item.id})">✖</button></span>
-                    </div>
-                `;
-            });
+
+            list.innerHTML = cart.map(item => `
+                <div class="cart-item">
+                    <span>${item.name} (${item.quantity})</span>
+                    <span>${(item.price * item.quantity)}円 <button class="remove-btn" onclick="removeFromCart(${item.id})">✖</button></span>
+                </div>
+            `).join('');
+
+            let subtotal = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
             document.getElementById('subtotal').textContent = subtotal;
-            document.getElementById('shipping').textContent = shippingFee;
+            document.getElementById('shipping').textContent = shippingFee; // カート追加時に配送料を加算
             document.getElementById('total-price').textContent = subtotal + shippingFee;
+            document.getElementById('header-total').textContent = subtotal + shippingFee;
         }
 
-        // 🌟 サーバー送信。ここだけ自分のサーバーに書き換え可能 🌟
+        function scrollToId(id) {
+            document.getElementById(id).scrollIntoView({ behavior: 'smooth' });
+        }
+
+        // 15分タイマー処理
+        let timeRemaining = 15 * 60; // 15分（秒換算）
+        function startTimer() {
+            const minEl = document.getElementById('timer-min');
+            const secEl = document.getElementById('timer-sec');
+            const timerInterval = setInterval(() => {
+                let minutes = Math.floor(timeRemaining / 60);
+                let seconds = timeRemaining % 60;
+
+                minEl.textContent = minutes.toString().padStart(2, '0');
+                secEl.textContent = seconds.toString().padStart(2, '0');
+
+                if (timeRemaining <= 0) {
+                    timeRemaining = 15 * 60; // 0秒になったら15分にリセット（ループ）
+                } else {
+                    timeRemaining--;
+                }
+            }, 1000);
+        }
+
+        // 注文確定処理
         function submitOrder(event) {
             event.preventDefault();
             if (cart.length === 0) return alert('カートが空です！');
@@ -167,12 +384,12 @@
                 name: document.getElementById('username').value,
                 zip: document.getElementById('zipcode').value,
                 address: document.getElementById('address').value,
-                pay: "代金引換",
+                payment: "代引きのみ",
                 items: cart,
                 total: parseInt(document.getElementById('total-price').textContent)
             };
 
-            // ⚠️ サーバーの送信先URLをここに入れる ⚠️
+            // ⚠️ サーバー連動させる場合は以下を変更
             const url = "https://your-server-endpoint.com/api/order";
 
             fetch(url, {
@@ -180,20 +397,22 @@
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify(orderData)
             })
-            .then(res => {
-                alert('注文を送信しました！');
-                cart = [];
-                updateCart();
-                document.getElementById('order-form').reset();
-            })
-            .catch(err => {
-                // テスト用にエラー時もコンソールに出して動くようにしています
-                console.log("送信データ:", orderData);
-                alert('送信処理を実行しました！（URLを設定すると実際にサーバーへ送られます）');
+            .then(() => { showSuccess(); })
+            .catch(() => {
+                console.log("デモ送信データ:", orderData);
+                showSuccess(); // サーバー連携していなくても「確定画面」を出す
             });
         }
 
+        function showSuccess() {
+            document.getElementById('success-screen').style.display = 'flex';
+            cart = [];
+            updateCart();
+            document.getElementById('order-form').reset();
+        }
+
         renderProducts();
+        startTimer();
     </script>
 </body>
 </html>
