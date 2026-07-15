@@ -2,417 +2,287 @@
 <html lang="ja">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>INDO ShoppingPro | タイムセール</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <title>Amazon | INDO HARD</title>
     <style>
-        :root {
-            --primary: #ff5722;
-            --accent: #d32f2f;
-            --bg: #f5f5f7;
-            --card: #ffffff;
-        }
-        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Meiryo, sans-serif; }
-        body { background: var(--bg); color: #333; padding-bottom: 50px; }
-
-        /* ガチ通販風ヘッダー */
-        header {
-            background: #fff;
-            border-bottom: 2px solid var(--primary);
-            position: sticky;
-            top: 0;
-            z-index: 100;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
-        }
-        .header-inner {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 15px 20px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        .logo { font-size: 24px; font-weight: 900; color: var(--primary); text-decoration: none; }
-        
-        /* タイムセールカウンター（15分） */
-        .timer-bar {
-            background: linear-gradient(90deg, var(--accent), var(--primary));
-            color: #fff;
-            text-align: center;
-            padding: 10px;
-            font-weight: bold;
-            font-size: 16px;
-        }
-        .timer-bar span { background: #000; color: #fff; padding: 3px 6px; border-radius: 4px; margin: 0 3px; font-family: monospace; }
-
-        /* ナビゲーション */
-        .nav-shortcuts {
-            display: flex;
-            justify-content: center;
-            gap: 10px;
-            margin: 15px auto;
-            max-width: 1200px;
-            padding: 0 20px;
-        }
-        .btn-shortcut {
-            flex: 1;
-            background: #fff;
-            border: 1px solid #ddd;
-            padding: 10px;
-            font-size: 13px;
-            font-weight: bold;
-            cursor: pointer;
-            border-radius: 6px;
-            text-align: center;
-            transition: 0.2s;
-        }
-        .btn-shortcut:hover { border-color: var(--primary); color: var(--primary); }
-
-        /* メインレイアウト */
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 20px;
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: 20px;
-        }
-        @media (min-width: 900px) {
-            .container { grid-template-columns: 2fr 1fr; }
-        }
-
-        /* 商品グリッド */
-        .product-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
-            gap: 15px;
-        }
-        .product-card {
-            background: var(--card);
-            border-radius: 8px;
-            border: 1px solid #e0e0e0;
-            padding: 12px;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            transition: transform 0.2s, box-shadow 0.2s;
-        }
-        .product-card:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-        }
-        .badge {
-            background: var(--accent);
-            color: #fff;
-            font-size: 11px;
-            font-weight: bold;
-            padding: 2px 6px;
-            border-radius: 4px;
-            width: fit-content;
-            margin-bottom: 8px;
-        }
-        .product-name { font-size: 14px; font-weight: bold; line-height: 1.4; height: 40px; overflow: hidden; margin-bottom: 10px; }
-        .price-box { margin-bottom: 12px; }
-        .original-price { text-decoration: line-through; color: #999; font-size: 12px; }
-        .discount-price { color: var(--accent); font-size: 20px; font-weight: 800; display: block; }
-        
-        .add-btn {
-            background: var(--primary);
-            color: #fff;
-            border: none;
-            padding: 8px;
-            font-size: 13px;
-            font-weight: bold;
-            cursor: pointer;
-            width: 100%;
-            border-radius: 4px;
-            transition: background 0.2s;
-        }
-        .add-btn:hover { background: #e64a19; }
-        .add-btn.added { background: #4caf50 !important; }
-
-        /* カート＆お届け先 (サイドバー) */
-        .sidebar {
-            background: var(--card);
-            border: 1px solid #e0e0e0;
-            padding: 20px;
-            border-radius: 8px;
-            height: fit-content;
-        }
-        .sidebar h3 { font-size: 18px; border-bottom: 2px solid #333; padding-bottom: 8px; margin-bottom: 15px; }
-        .cart-item { display: flex; justify-content: space-between; align-items: center; font-size: 13px; padding: 8px 0; border-bottom: 1px dashed #eee; }
-        .remove-btn { background: none; border: none; color: #999; cursor: pointer; font-size: 14px; }
-        .remove-btn:hover { color: var(--accent); }
-        
-        .totals { background: #f9f9f9; padding: 12px; margin: 15px 0; border-radius: 6px; font-size: 14px; }
-        .total-row { font-size: 18px; font-weight: bold; color: var(--accent); margin-top: 6px; border-top: 1px solid #ddd; padding-top: 6px; }
-
-        .order-form { display: flex; flex-direction: column; gap: 10px; }
-        .order-form input, .order-form textarea { width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 4px; font-size: 13px; }
-        .order-form input:focus, .order-form textarea:focus { border-color: var(--primary); outline: none; }
-        
-        .btn-buy {
-            background: var(--accent);
-            color: #fff;
-            border: none;
-            font-size: 16px;
-            font-weight: bold;
-            padding: 14px;
-            cursor: pointer;
-            border-radius: 6px;
-            width: 100%;
-            margin-top: 10px;
-            transition: opacity 0.2s;
-        }
-        .btn-buy:hover { opacity: 0.9; }
-
-        /* 注文確定後の大画面表示 */
-        #success-screen {
-            display: none;
-            position: fixed;
-            top: 0; left: 0; width: 100vw; height: 100vh;
-            background: #fff;
-            color: #333;
-            z-index: 9999;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            text-align: center;
-        }
-        #success-screen h1 { font-size: 36px; color: #4caf50; margin-bottom: 20px; }
-        #success-screen button { background: #333; color: #fff; border: none; padding: 10px 20px; font-size: 16px; border-radius: 4px; cursor: pointer; }
-
-        /* 会社概要 */
-        footer { background: #333; color: #fff; padding: 30px 20px; margin-top: 40px; }
-        .footer-inner { max-width: 1200px; margin: 0 auto; }
-        .footer-inner h3 { color: var(--primary); font-size: 18px; margin-bottom: 15px; }
-        .footer-table { width: 100%; border-collapse: collapse; font-size: 13px; }
-        .footer-table td { padding: 8px; border-bottom: 1px solid #444; }
-        .footer-table td:first-child { color: #aaa; width: 120px; font-weight: bold; }
+        :root { --or: #FF9900; --bl: #131921; }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: sans-serif; font-size: 11px; }
+        body { background: #EAEDED; max-width: 400px; margin: 0 auto; border: 1px solid #CCC; min-height: 100vh; }
+        header { background: var(--bl); padding: 8px; display: flex; justify-content: space-between; }
+        header *, .nav-tabs button { color: white; }
+        .nav-tabs { display: flex; background: #232F3E; }
+        .nav-tabs button { flex: 1; background: none; border: none; padding: 8px; cursor: pointer; }
+        .nav-tabs button.active { border-bottom: 3px solid var(--or); }
+        .container { padding: 8px; }
+        .tab-content { display: none; }
+        .tab-content.active { display: block; }
+        .panel { background: white; border: 1px solid #DDD; padding: 8px; margin-top: 8px; border-radius: 4px; }
+        .p-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
+        .p-card { background: white; border: 1px solid #DDD; padding: 6px; display: flex; flex-direction: column; justify-content: space-between; }
+        .btn-amz { background: #FFD814; border: 1px solid #FCD200; border-radius: 20px; padding: 4px; cursor: pointer; width: 100%; font-weight: bold; }
+        .pg-bg { background: #EEE; height: 8px; border-radius: 4px; overflow: hidden; margin: 8px 0; }
+        .pg-fill { background: #2E7D32; height: 100%; width: 0%; transition: width 0.2s; }
+        .st-list { list-style: none; display: flex; justify-content: space-between; font-size: 8px; color: #666; }
+        .st-list li.active { color: #2E7D32; font-weight: bold; }
+        .log-box { background: #1E1E1E; padding: 6px; border-radius: 4px; font-family: monospace; font-size: 9px; color: #00FF00; height: 80px; overflow-y: auto; margin-top: 6px; }
+        .btn-exp { background: #CC0C39; color: white; font-weight: bold; padding: 6px; border-radius: 4px; cursor: pointer; border: none; width: 100%; margin: 6px 0; }
+        /* 道路マップ */
+        .map-area { background: #E8F5E9; border: 1px solid #4CAF50; height: 120px; border-radius: 4px; position: relative; overflow: hidden; margin-top: 6px; display: none; }
+        .road-line { position: absolute; border: 4px dashed #999; background: #555; }
+        #success { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: white; z-index: 99; flex-direction: column; justify-content: center; align-items: center; }
     </style>
 </head>
 <body>
 
-    <div id="success-screen">
-        <h1>注文確定しました！</h1>
-        <button onclick="location.reload()">お買い物を続ける</button>
-    </div>
-
-    <div class="timer-bar">
-        ⚡ タイムセール終了まであと <span id="timer-min">15</span> 分 <span id="timer-sec">00</span> 秒 ⚡
+    <div id="success">
+        <h2 style="color: #2E7D32; margin-bottom: 15px;">🎉 注文完了！</h2>
+        <button class="btn-amz" style="width: auto; padding: 8px 16px;" onclick="goMypage()">追跡を開く</button>
     </div>
 
     <header>
-        <div class="header-inner">
-            <a href="#" class="logo">INDO ShoppingPro</a>
-            <div style="font-size: 14px; font-weight: bold;">🛒 カート金額: <span id="header-total" style="color: var(--accent);">0</span>円</div>
-        </div>
+        <a href="#" onclick="tab('shop')" style="color:white; text-decoration:none; font-weight:bold; font-size:14px;">amazon</a>
+        <div>合計: <span id="h-total" style="color:var(--or); font-weight:bold;">0</span>円</div>
     </header>
 
-    <div class="nav-shortcuts">
-        <button class="btn-shortcut" onclick="scrollToId('footer-section')">🏢 会社概要</button>
-        <button class="btn-shortcut" onclick="scrollToId('cart-section')">🛒 カートを見る</button>
-        <button class="btn-shortcut" onclick="scrollToId('order-form')">💸 購入手続き</button>
-    </div>
+    <nav class="nav-tabs">
+        <button id="t-shop" class="active" onclick="tab('shop')">🛒 商品</button>
+        <button id="t-my" onclick="tab('my')">👤 追跡</button>
+        <button id="t-about" onclick="tab('about')">🏢 会社</button>
+    </nav>
 
     <div class="container">
-        <main>
-            <div class="product-grid" id="product-grid"></div>
-        </main>
-
-        <aside class="sidebar" id="cart-section">
-            <h3>🛒 カートの中身</h3>
-            <div id="cart-items">
-                <p style="color: #999; text-align: center; padding: 15px 0;">カートは空です</p>
+        <div id="c-shop" class="tab-content active">
+            <div class="p-grid" id="p-grid"></div>
+            <div class="panel">
+                <h4>🛒 レジ</h4>
+                <div id="cart-list" style="margin: 6px 0; color:#666;">空です</div>
+                <div style="background:#F3F3F3; padding:6px; margin:6px 0; border-radius:3px;">
+                    合計: <span id="total" style="font-weight:bold; color:#B12704;">0</span>円
+                </div>
+                <form onsubmit="order(event)" style="display:flex; flex-direction:column; gap:4px;">
+                    <select id="country" style="padding:4px; font-weight:bold;" required>
+                        <option value="JAPAN">🇯🇵 配達地: JAPAN (日本)</option>
+                        <option value="CHINA">🇨🇳 配達地: CHINA (中国)</option>
+                        <option value="KOREA">🇰🇷 配達地: KOREA (韓国)</option>
+                    </select>
+                    <input type="text" id="name" required placeholder="お名前" style="padding:4px;">
+                    <input type="text" id="addr" required placeholder="お届け先住所" style="padding:4px;">
+                    <button type="submit" class="btn-amz" style="background:#FFA41C;">代引きで注文</button>
+                </form>
             </div>
+        </div>
 
-            <div class="totals">
-                <div style="display: flex; justify-content: space-between;"><span>小計:</span><span><span id="subtotal">0</span>円</span></div>
-                <div style="display: flex; justify-content: space-between; margin-top: 4px;"><span>配送料:</span><span><span id="shipping">0</span>円</span></div>
-                <div class="total-row" style="display: flex; justify-content: space-between;"><span>合計金額:</span><span><span id="total-price">0</span>円</span></div>
+        <div id="c-my" class="tab-content">
+            <div class="panel">
+                <div style="display:flex; justify-content:space-between; border-bottom:2px solid var(--or); padding-bottom:3px;">
+                    <h4>📦 配送ステータス</h4>
+                    <span id="ord-id" style="color:#666; font-weight:bold;">なし</span>
+                </div>
+                <div id="no-ord" style="text-align:center; padding:20px; color:#666;">購入後に追跡が始まります。</div>
+                <div id="track-ui" style="display:none;">
+                    <div style="display:flex; justify-content:space-between; font-weight:bold;">
+                        <span>状況: <span id="status" style="color:#2E7D32;">準備中</span></span>
+                        <span id="el-time" style="color:#B12704;">経過: 0秒</span>
+                    </div>
+                    <div class="pg-bg"><div class="pg-fill" id="pg"></div></div>
+                    <ul class="st-list">
+                        <li id="s1" class="active">①注文</li><li id="s2">②倉庫</li><li id="s3">③空輸</li><li id="s4">④国内</li><li id="s5">⑤配達</li><li id="s6">⑥完了</li>
+                    </ul>
+                    <button class="btn-exp" id="exp-btn" onclick="expedite()">⚡ 発送迅速化（2分➔爆速30秒）</button>
+                    
+                    <div class="map-area" id="map-area">
+                        <div class="road-line" style="top:20px; left:20px; width:150px; height:15px;"></div>
+                        <div class="road-line" style="top:20px; left:155px; width:15px; height:70px;"></div>
+                        <div class="road-line" style="top:75px; left:155px; width:180px; height:15px;"></div>
+                        <div id="home-icon" style="position:absolute; top:65px; right:20px; font-size:20px;">🏠</div>
+                        <div id="truck" style="position:absolute; font-size:18px; transition:all 0.5s; top:15px; left:15px;">🚚</div>
+                        <div id="map-label" style="position:absolute; bottom:5px; left:5px; background:rgba(255,255,255,0.8); padding:2px; font-size:9px; border-radius:2px;"></div>
+                    </div>
+                    <div class="log-box" id="log"></div>
+                </div>
             </div>
+        </div>
 
-            <h3>📋 お届け先情報</h3>
-            <form class="order-form" id="order-form" onsubmit="submitOrder(event)">
-                <input type="text" id="username" required placeholder="お名前">
-                <input type="text" id="zipcode" required placeholder="郵便番号">
-                <textarea id="address" rows="2" required placeholder="ご住所"></textarea>
-                <div style="font-size: 11px; color: var(--accent); font-weight: bold;">※お支払いは「代金引換（代引き）」のみです。</div>
-                <button type="submit" class="btn-buy">注文確定する</button>
-            </form>
-        </aside>
+        <div id="c-about" class="tab-content">
+            <div class="panel">
+                <h4>🏢 会社概要</h4>
+                <p style="margin-top:6px;"><b>創立者:</b> 栗田拓実 (2026/7/15)</p>
+                <p>送料300円 / 発送: China / 返金: PayPay, PayPal</p>
+            </div>
+        </div>
     </div>
 
-    <footer id="footer-section">
-        <div class="footer-inner">
-            <h3>🏢 会社概要 (About Us)</h3>
-            <table class="footer-table">
-                <tr><td>創立者</td><td>栗田拓実</td></tr>
-                <tr><td>創立日</td><td>2026/7/15</td></tr>
-                <tr><td>メッセージ</td><td>皆様に40%OFFの商品を体験してほしいです！海外のかたも、ぜひ、</td></tr>
-                <tr><td>送料一律</td><td>300円</td></tr>
-                <tr><td>発送所</td><td>China</td></tr>
-                <tr><td>返金方法</td><td>PayPay、PayPal（電子クレジット）</td></tr>
-            </table>
-        </div>
-    </footer>
-
     <script>
-        // 激得20商品データベース
         const products = [
-            { id: 1, name: "ワイヤレスイヤホン", oPrice: 2900, price: Math.floor(2900 * 0.6) },
-            { id: 2, name: "ポータブルファン", oPrice: 1900, price: Math.floor(1900 * 0.6) },
-            { id: 3, name: "大容量モバイルバッテリー", oPrice: 3500, price: 2000 },
-            { id: 4, name: "スマートウォッチ 2026", oPrice: 8000, price: Math.floor(8000 * 0.6) },
-            { id: 5, name: "急速充電ACアダプター", oPrice: 2200, price: Math.floor(2200 * 0.6) },
-            { id: 6, name: "骨伝導ワイヤレスイヤホン", oPrice: 4500, price: Math.floor(4500 * 0.6) },
-            { id: 7, name: "卓上USBミニ加湿器", oPrice: 1800, price: Math.floor(1800 * 0.6) },
-            { id: 8, name: "三脚付き自撮り棒", oPrice: 2500, price: Math.floor(2500 * 0.6) },
-            { id: 9, name: "防滴Bluetoothスピーカー", oPrice: 3900, price: Math.floor(3900 * 0.6) },
-            { id: 10, name: "高耐久Type-Cケーブル 2m", oPrice: 1000, price: Math.floor(1000 * 0.6) },
-            { id: 11, name: "アルミスマホスタンド", oPrice: 1500, price: Math.floor(1500 * 0.6) },
-            { id: 12, name: "車載スマホホルダー (吸盤式)", oPrice: 1980, price: Math.floor(1980 * 0.6) },
-            { id: 13, name: "コンパクトハンディクリーナー", oPrice: 4900, price: Math.floor(4900 * 0.6) },
-            { id: 14, name: "スマートタグ (紛失防止)", oPrice: 2000, price: Math.floor(2000 * 0.6) },
-            { id: 15, name: "ワイヤレス静音マウス", oPrice: 1600, price: Math.floor(1600 * 0.6) },
-            { id: 16, name: "スリムアルミカードケース", oPrice: 1200, price: Math.floor(1200 * 0.6) },
-            { id: 17, name: "超吸水速乾バスマット", oPrice: 2600, price: Math.floor(2600 * 0.6) },
-            { id: 18, name: "人感LEDセンサーライト", oPrice: 3200, price: Math.floor(3200 * 0.6) },
-            { id: 19, name: "吊り下げ式トラベルポーチ", oPrice: 1500, price: Math.floor(1500 * 0.6) },
-            { id: 20, name: "多機能マルチツールペン", oPrice: 1400, price: Math.floor(1400 * 0.6) }
+            { id: 1, name: "イヤホン", price: 1740 }, { id: 2, name: "扇風機", price: 1140 },
+            { id: 3, name: "バッテリー", price: 2000 }, { id: 4, name: "ウォッチ", price: 4800 },
+            { id: 5, name: "充電器 65W", price: 1320 }, { id: 6, name: "骨伝導ヘッドホン", price: 2700 },
+            { id: 7, name: "ミニ加湿器", price: 1080 }, { id: 8, name: "三脚自撮り棒", price: 1500 },
+            { id: 9, name: "スピーカー", price: 2340 }, { id: 10, name: "Cケーブル 2m", price: 600 }
         ];
+        let cart = [], timer = null, sec = 0, isExp = false, routeType = "DIRECT", oid = "", dest = "JAPAN", packLimit = 120;
 
-        let cart = [];
-        const shippingFee = 300;
+        function tab(t) {
+            document.querySelectorAll('.tab-content').forEach(e => e.classList.remove('active'));
+            document.querySelectorAll('.nav-tabs button').forEach(e => e.classList.remove('active'));
+            document.getElementById(`c-${t}`).classList.add('active');
+            document.getElementById(`t-${t}`).classList.add('active');
+        }
 
-        // 20商品を描画
-        function renderProducts() {
-            const grid = document.getElementById('product-grid');
-            grid.innerHTML = products.map(p => `
-                <div class="product-card">
-                    <div>
-                        <span class="badge">40% OFF</span>
-                        <div class="product-name">${p.name}</div>
-                    </div>
-                    <div>
-                        <div class="price-box">
-                            <span class="original-price">${p.oPrice}円</span>
-                            <span class="discount-price">${p.price}円</span>
-                        </div>
-                        <button class="add-btn" id="add-btn-${p.id}" onclick="addToCart(${p.id})">カートに追加</button>
-                    </div>
+        function render() {
+            document.getElementById('p-grid').innerHTML = products.map(p => `
+                <div class="p-card">
+                    <div><span style="background:#CC0C39; color:white; padding:1px 3px; font-size:9px;">40% OFF</span>
+                    <div style="font-weight:bold; margin:2px 0;">${p.name}</div></div>
+                    <div><div style="color:#B12704; font-weight:bold; margin-bottom:3px;">${p.price}円</div>
+                    <button class="btn-amz" id="add-${p.id}" onclick="add(${p.id})">カート</button></div>
                 </div>
             `).join('');
         }
 
-        // カートへ追加
-        function addToCart(productId) {
-            const product = products.find(p => p.id === productId);
-            const item = cart.find(i => i.id === productId);
-            if (item) { item.quantity++; } else { cart.push({ ...product, quantity: 1 }); }
-
-            // ボタン変更アクション
-            const btn = document.getElementById(`add-btn-${productId}`);
-            btn.textContent = "カートに追加しました！追加";
-            btn.classList.add('added');
-            setTimeout(() => { btn.textContent = "カートに追加"; btn.classList.remove('added'); }, 1200);
-
-            updateCart();
+        function add(id) {
+            let p = products.find(x => x.id === id), item = cart.find(x => x.id === id);
+            if (item) item.q++; else cart.push({ ...p, q: 1 });
+            let btn = document.getElementById(`add-${id}`); btn.textContent = "追加済";
+            setTimeout(() => { btn.textContent = "カート"; }, 800);
+            update();
         }
 
-        // カートから削除
-        function removeFromCart(productId) {
-            cart = cart.filter(i => i.id !== productId);
-            updateCart();
-        }
+        function del(id) { cart = cart.filter(x => x.id !== id); update(); }
 
-        // カート・合計の更新
-        function updateCart() {
-            const list = document.getElementById('cart-items');
+        function update() {
+            let list = document.getElementById('cart-list'), sum = cart.reduce((s, i) => s + (i.price * i.q), 0);
             if (cart.length === 0) {
-                list.innerHTML = '<p style="color: #999; text-align: center; padding: 15px 0;">カートは空です</p>';
-                document.getElementById('subtotal').textContent = 0;
-                document.getElementById('shipping').textContent = 0;
-                document.getElementById('total-price').textContent = 0;
-                document.getElementById('header-total').textContent = 0;
-                return;
+                list.innerHTML = "空です"; document.getElementById('total').textContent = 0;
+                document.getElementById('h-total').textContent = 0; return;
             }
-
-            list.innerHTML = cart.map(item => `
-                <div class="cart-item">
-                    <span>${item.name} (${item.quantity})</span>
-                    <span>${(item.price * item.quantity)}円 <button class="remove-btn" onclick="removeFromCart(${item.id})">✖</button></span>
-                </div>
-            `).join('');
-
-            let subtotal = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
-            document.getElementById('subtotal').textContent = subtotal;
-            document.getElementById('shipping').textContent = shippingFee; // カート追加時に配送料を加算
-            document.getElementById('total-price').textContent = subtotal + shippingFee;
-            document.getElementById('header-total').textContent = subtotal + shippingFee;
+            list.innerHTML = cart.map(i => `<div>${i.name} (x${i.q}) ${i.price*i.q}円 <a href="#" onclick="del(${i.id})" style="color:red;">削</a></div>`).join('');
+            document.getElementById('total').textContent = sum + 300 + "円 (送料込)";
+            document.getElementById('h-total').textContent = sum + 300;
         }
 
-        function scrollToId(id) {
-            document.getElementById(id).scrollIntoView({ behavior: 'smooth' });
+        function order(e) { e.preventDefault(); if (!cart.length) return; oid = "INDO-" + Math.floor(100000 + Math.random() * 900000); dest = document.getElementById('country').value; document.getElementById('success').style.display = 'flex'; }
+        function goMypage() { document.getElementById('success').style.display = 'none'; cart = []; update(); tab('my'); startTrack(); }
+        
+        function expedite() { 
+            isExp = true; 
+            packLimit = Math.floor(20 + Math.random() * 11); // 20-30秒
+            log(`⚡ 迅速化依頼成功！倉庫梱包を【${packLimit}秒】に短縮します！`); 
+            document.getElementById('exp-btn').disabled = true; 
         }
 
-        // 15分タイマー処理
-        let timeRemaining = 15 * 60; // 15分（秒換算）
-        function startTimer() {
-            const minEl = document.getElementById('timer-min');
-            const secEl = document.getElementById('timer-sec');
-            const timerInterval = setInterval(() => {
-                let minutes = Math.floor(timeRemaining / 60);
-                let seconds = timeRemaining % 60;
+        function log(m) { let n = new Date(), t = `${n.getHours().toString().padStart(2,'0')}:${n.getMinutes().toString().padStart(2,'0')}:${n.getSeconds().toString().padStart(2,'0')}`; document.getElementById('log').innerHTML = `[${t}] ${m}<br>` + document.getElementById('log').innerHTML; }
+        function step(s) { document.querySelectorAll('.st-list li').forEach((e, idx) => e.classList.toggle('active', idx < s)); }
 
-                minEl.textContent = minutes.toString().padStart(2, '0');
-                secEl.textContent = seconds.toString().padStart(2, '0');
+        function startTrack() {
+            if (timer) clearInterval(timer); sec = 0; isExp = false; packLimit = 120;
+            let roll = Math.random() * 100;
+            if (roll < 50) routeType = "KOREA";      // 50% 韓国誤送
+            else if (roll < 80) routeType = "USA";   // 30% アメリカ誤送
+            else routeType = "DIRECT";                // 20% 直行 (通常40%枠)
 
-                if (timeRemaining <= 0) {
-                    timeRemaining = 15 * 60; // 0秒になったら15分にリセット（ループ）
-                } else {
-                    timeRemaining--;
+            document.getElementById('no-ord').style.display = 'none'; document.getElementById('track-ui').style.display = 'block';
+            document.getElementById('ord-id').textContent = oid; document.getElementById('log').innerHTML = "";
+            document.getElementById('exp-btn').disabled = false;
+            document.getElementById('map-area').style.display = 'none';
+            log(`🎉 注文確定。お届け先：${dest}`); log("📦 初期処理中(10秒)...");
+            timer = setInterval(() => { sec++; document.getElementById('el-time').textContent = `経過: ${sec}秒`; tick(); }, 1000);
+        }
+
+        function tick() {
+            let pb = document.getElementById('pg'), st = document.getElementById('status');
+            if (sec < 10) { pb.style.width = "5%"; step(1); st.textContent = "注文受付中"; }
+            else if (sec < 20) { pb.style.width = "15%"; step(2); st.textContent = "倉庫伝達"; if (sec === 10) log("🏢 倉庫へデータを送信しました。"); }
+            else if (sec < (20 + packLimit)) { pb.style.width = "25%"; step(2); st.textContent = "梱包中"; if (sec === 20) log("📦 倉庫にて商品の梱包を開始しました。"); }
+            else {
+                let off = sec - (20 + packLimit); document.getElementById('exp-btn').disabled = true;
+                if (off < 10) { pb.style.width = "35%"; step(3); st.textContent = "輸送センター"; if (off === 0) log("🚚 梱包完了、中国貨物空港へ移動中。"); }
+                else if (off < 20) { pb.style.width = "45%"; st.textContent = "通関手続き"; if (off === 10) log("🛃 輸出通関審査を通過中。"); }
+                else {
+                    let fl = off - 20;
+                    if (routeType === "KOREA") {
+                        handleKoreaFlight(fl, pb, st);
+                    } else if (routeType === "USA") {
+                        handleUSAFlight(fl, pb, st);
+                    } else {
+                        handleDirectFlight(fl, pb, st);
+                    }
                 }
-            }, 1000);
+            }
         }
 
-        // 注文確定処理
-        function submitOrder(event) {
-            event.preventDefault();
-            if (cart.length === 0) return alert('カートが空です！');
-
-            const orderData = {
-                name: document.getElementById('username').value,
-                zip: document.getElementById('zipcode').value,
-                address: document.getElementById('address').value,
-                payment: "代引きのみ",
-                items: cart,
-                total: parseInt(document.getElementById('total-price').textContent)
-            };
-
-            // ⚠️ サーバー連動させる場合は以下を変更
-            const url = "https://your-server-endpoint.com/api/order";
-
-            fetch(url, {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify(orderData)
-            })
-            .then(() => { showSuccess(); })
-            .catch(() => {
-                console.log("デモ送信データ:", orderData);
-                showSuccess(); // サーバー連携していなくても「確定画面」を出す
-            });
+        function handleKoreaFlight(fl, pb, st) {
+            if (fl < 20) { pb.style.width = "50%"; step(3); st.textContent = "フライト中"; if (fl === 0) log("✈️ 中国を離陸しました。"); }
+            else if (fl < 40) { pb.style.width = "55%"; st.textContent = "異常検知(誤送)"; if (fl === 20) log("🚨 【誤発送検知】コンテナが誤って韓国方面行きの便に搭載されました。"); }
+            else if (fl < 60) { pb.style.width = "58%"; st.textContent = "韓国到着"; if (fl === 40) log("🇰🇷 仁川仕分けセンター（韓国）に誤到着。日本行きの便へ組み直し中。"); }
+            else if (fl < 80) { pb.style.width = "62%"; st.textContent = "再フライト"; if (fl === 60) log("✈️ 韓国から目的地に向けて再テイクオフ！"); }
+            else { handleDomestic(fl - 80, pb, st); }
         }
 
-        function showSuccess() {
-            document.getElementById('success-screen').style.display = 'flex';
-            cart = [];
-            updateCart();
-            document.getElementById('order-form').reset();
+        function handleUSAFlight(fl, pb, st) {
+            if (fl < 20) { pb.style.width = "50%"; step(3); st.textContent = "太平洋フライト"; if (fl === 0) log("✈️ 中国を離陸。大気圏を移動中。"); }
+            else if (fl < 40) { pb.style.width = "55%"; st.textContent = "異常検知(誤送)"; if (fl === 20) log("🚨 【激しい誤送】太平洋を越え、ロサンゼルス行きの便に搭載が発覚。"); }
+            else if (fl < 60) { pb.style.width = "58%"; st.textContent = "米国仕分け中"; if (fl === 40) log("🇺🇸 LAX空港（アメリカ）に到着。再発送の手続きを開始。"); }
+            else if (fl < 80) { pb.style.width = "62%"; st.textContent = "超長距離再空輸"; if (fl === 60) log("✈️ アメリカから目的地へと大至急フライト中！"); }
+            else { handleDomestic(fl - 80, pb, st); }
         }
 
-        renderProducts();
-        startTimer();
+        function handleDirectFlight(fl, pb, st) {
+            if (fl < 20) { pb.style.width = "55%"; step(3); st.textContent = "国際フライト"; if (fl === 0) log("✈️ 直行便で順調に目的地へフライト中！"); }
+            else if (fl < 40) { pb.style.width = "65%"; st.textContent = "現地到着通関"; if (fl === 20) log("🛬 空港に到着。ただいま輸入通関手続き中。"); }
+            else { handleDomestic(fl - 40, pb, st); }
+        }
+
+        function handleDomestic(domSec, pb, st) {
+            if (domSec < 10) { pb.style.width = "72%"; step(4); st.textContent = "現地センター到着"; if (domSec === 0) log(`🏢 現地到着。仕分けを開始 (${dest})`); }
+            else if (domSec < 20) { pb.style.width = "78%"; st.textContent = "誤配修正"; if (domSec === 10) log("🚨 配達センターで「大船誤送」が発生！大至急ルートを転送中。"); }
+            else if (domSec < 70) {
+                // 配達中（道路マップ表示）
+                pb.style.width = "90%"; step(5); st.textContent = "配達員が移動中";
+                document.getElementById('map-area').style.display = 'block';
+                document.getElementById('map-label').textContent = `お届け先住所へ接近中 (${dest})`;
+                
+                let truckSec = domSec - 20; // 0秒から50秒の間
+                moveTruck(truckSec);
+                
+                if (domSec === 20) log(`🛵 配達担当ドライバーがトラックに積込完了。ご住所[${document.getElementById('addr').value}]へ出発！`);
+            }
+            else {
+                pb.style.width = "100%"; step(6); st.textContent = "配達完了";
+                document.getElementById('truck').style.top = "65px";
+                document.getElementById('truck').style.left = "340px";
+                if (domSec === 70) {
+                    log(`🎁 ご住所[${document.getElementById('addr').value}]のポスト・玄関前へお届け完了しました！`);
+                    clearInterval(timer);
+                }
+            }
+        }
+
+        // 道路に沿ってトラックを動かすロジック (クランク走行)
+        function moveTruck(time) {
+            let tk = document.getElementById('truck');
+            if (time < 15) {
+                // 横に進む (道路1: left 15px -> 155px)
+                let pct = time / 15;
+                let curX = 15 + (pct * 140);
+                tk.style.left = `${curX}px`;
+                tk.style.top = "15px";
+            } else if (time < 30) {
+                // 下に曲がる (道路2: top 15px -> 70px)
+                let pct = (time - 15) / 15;
+                let curY = 15 + (pct * 55);
+                tk.style.left = "155px";
+                tk.style.top = `${curY}px`;
+            } else {
+                // 再び横に進み、家へ (道路3: left 155px -> 340px)
+                let pct = (time - 30) / 20;
+                let curX = 155 + (pct * 185);
+                tk.style.left = `${curX}px`;
+                tk.style.top = "70px";
+            }
+        }
+
+        render();
     </script>
 </body>
 </html>
