@@ -3,353 +3,224 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>安全送達 - お荷物追跡サービス</title>
+    <title>安全送達 - 公式ウェブサイト</title>
     <style>
-        :root {
-            --primary-color: #0f2b5c;
-            --secondary-color: #059669;
-            --accent-color: #2563eb;
-            --bg-color: #f8fafc;
-            --card-bg: #ffffff;
-            --text-main: #1e293b;
-            --text-sub: #64748b;
-            --border-color: #e2e8f0;
-        }
-
         * {
             box-sizing: border-box;
             margin: 0;
             padding: 0;
-            font-family: "Helvetica Neue", Arial, "Hiragino Kaku Gothic ProN", "Hiragino Sans", Meiryo, sans-serif;
+            font-family: sans-serif;
         }
 
         body {
-            background-color: var(--bg-color);
-            color: var(--text-main);
+            background-color: #f4f6f8;
+            color: #333;
             line-height: 1.6;
         }
 
-        /* ヘッダー */
         header {
-            background-color: var(--primary-color);
+            background-color: #0f2b5c;
             color: white;
             padding: 1rem 2rem;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
         }
 
         .logo {
-            font-size: 1.6rem;
+            font-size: 1.5rem;
             font-weight: bold;
-            letter-spacing: 2px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
         }
 
-        .logo-badge {
-            background-color: var(--secondary-color);
-            font-size: 0.75rem;
-            padding: 2px 8px;
-            border-radius: 4px;
-            letter-spacing: normal;
+        nav button {
+            background: none;
+            border: none;
+            color: #ccc;
+            font-size: 1rem;
+            margin-left: 15px;
+            cursor: pointer;
+            padding: 5px 10px;
         }
 
-        nav ul {
-            display: flex;
-            list-style: none;
-            gap: 1.5rem;
-            font-size: 0.9rem;
-        }
-
-        nav a {
-            color: #cbd5e1;
-            text-decoration: none;
-            transition: color 0.2s;
-        }
-
-        nav a:hover {
+        nav button.active, nav button:hover {
             color: white;
+            font-weight: bold;
+            border-bottom: 2px solid white;
         }
 
-        /* メインコンテンツ */
         .container {
-            max-width: 900px;
+            max-width: 800px;
             margin: 2rem auto;
             padding: 0 1rem;
         }
 
-        .hero-title {
-            text-align: center;
-            margin-bottom: 2rem;
-        }
-
-        .hero-title h1 {
-            font-size: 1.8rem;
-            color: var(--primary-color);
-            margin-bottom: 0.5rem;
-        }
-
-        .hero-title p {
-            color: var(--text-sub);
-            font-size: 0.95rem;
-        }
-
-        /* 検索ボックス */
-        .search-card {
-            background: var(--card-bg);
+        .tab-content {
+            display: none;
+            background: white;
             padding: 2rem;
-            border-radius: 12px;
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
-            border: 1px solid var(--border-color);
-            margin-bottom: 2rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        .tab-content.active {
+            display: block;
         }
 
         .search-box {
             display: flex;
             gap: 10px;
-        }
-
-        .search-input {
-            flex: 1;
-            padding: 0.8rem 1.2rem;
-            font-size: 1.1rem;
-            border: 2px solid var(--border-color);
-            border-radius: 8px;
-            outline: none;
-            text-transform: uppercase;
-            transition: border-color 0.2s;
-        }
-
-        .search-input:focus {
-            border-color: var(--accent-color);
-        }
-
-        .search-btn {
-            background-color: var(--primary-color);
-            color: white;
-            border: none;
-            padding: 0.8rem 1.8rem;
-            font-size: 1rem;
-            font-weight: bold;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: background-color 0.2s;
-        }
-
-        .search-btn:hover {
-            background-color: #1e3a8a;
-        }
-
-        /* サンプルコード案内 */
-        .sample-codes {
-            margin-top: 1rem;
-            font-size: 0.85rem;
-            color: var(--text-sub);
-        }
-
-        .sample-tag {
-            display: inline-block;
-            background: #e2e8f0;
-            color: #334155;
-            padding: 2px 8px;
-            border-radius: 4px;
-            margin: 2px;
-            cursor: pointer;
-            font-family: monospace;
-        }
-
-        .sample-tag:hover {
-            background: #cbd5e1;
-        }
-
-        /* 結果表示エリア */
-        .result-card {
-            display: none;
-            background: var(--card-bg);
-            padding: 2rem;
-            border-radius: 12px;
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
-            border: 1px solid var(--border-color);
-        }
-
-        .result-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            border-bottom: 2px solid var(--border-color);
-            padding-bottom: 1rem;
             margin-bottom: 1.5rem;
         }
 
-        .tracking-number-display {
-            font-size: 1.2rem;
-            font-weight: bold;
+        input[type="text"] {
+            flex: 1;
+            padding: 10px;
+            font-size: 1rem;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        button.btn {
+            background: #0f2b5c;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            font-size: 1rem;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        button.btn:hover {
+            background: #1e3a8a;
+        }
+
+        .result-box {
+            margin-top: 1.5rem;
+            padding: 1rem;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            background: #fafafa;
         }
 
         .status-badge {
-            background-color: var(--secondary-color);
+            display: inline-block;
+            background: #059669;
             color: white;
-            padding: 0.4rem 1rem;
-            border-radius: 20px;
+            padding: 3px 8px;
+            border-radius: 4px;
             font-weight: bold;
+        }
+
+        .message-box {
+            margin-top: 10px;
+            padding: 10px;
+            background: #e0f2fe;
+            border-left: 4px solid #0284c7;
             font-size: 0.95rem;
         }
 
-        /* エラー表示 */
-        .error-card {
-            display: none;
-            background: #fef2f2;
-            border: 1px solid #fecaca;
-            color: #991b1b;
-            padding: 1.5rem;
-            border-radius: 12px;
-            text-align: center;
-            font-weight: bold;
-        }
-
-        /* タイムライン（ステップ一覧） */
         .timeline {
-            position: relative;
-            padding-left: 20px;
+            margin-top: 1.5rem;
+            border-left: 2px solid #ccc;
+            padding-left: 15px;
         }
 
         .timeline-item {
-            position: relative;
-            padding-bottom: 1.2rem;
-            padding-left: 25px;
-            border-left: 3px solid #e2e8f0;
+            margin-bottom: 10px;
+            color: #888;
         }
 
-        .timeline-item:last-child {
-            border-left: 3px solid transparent;
-            padding-bottom: 0;
-        }
-
-        .timeline-icon {
-            position: absolute;
-            left: -10px;
-            top: 0;
-            width: 16px;
-            height: 16px;
-            border-radius: 50%;
-            background-color: #cbd5e1;
-            border: 3px solid white;
-        }
-
-        /* 通過済みステップ */
-        .timeline-item.completed {
-            border-left-color: var(--secondary-color);
-        }
-
-        .timeline-item.completed .timeline-icon {
-            background-color: var(--secondary-color);
-        }
-
-        .timeline-item.completed .status-title {
-            color: var(--text-main);
-        }
-
-        /* 現在地ステップ */
-        .timeline-item.active .timeline-icon {
-            background-color: var(--accent-color);
-            box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.2);
-        }
-
-        .timeline-item.active .status-title {
-            color: var(--accent-color);
+        .timeline-item.done {
+            color: #111;
             font-weight: bold;
-            font-size: 1.05rem;
         }
 
-        .step-num {
-            font-size: 0.8rem;
-            color: var(--text-sub);
-            margin-right: 8px;
+        .timeline-item.current {
+            color: #2563eb;
+            font-weight: bold;
         }
 
-        .status-title {
-            color: #94a3b8;
-            font-size: 0.95rem;
-        }
-
-        /* フッター */
-        footer {
-            text-align: center;
-            padding: 2rem;
-            color: var(--text-sub);
-            font-size: 0.85rem;
-            margin-top: 3rem;
-            border-top: 1px solid var(--border-color);
+        .error-msg {
+            color: #dc2626;
+            font-weight: bold;
         }
     </style>
 </head>
 <body>
 
     <header>
-        <div class="logo">
-            安全送達 <span class="logo-badge">公式配送追跡</span>
-        </div>
+        <div class="logo">安全送達</div>
         <nav>
-            <ul>
-                <li><a href="#">トップ</a></li>
-                <li><a href="#">追跡サービス</a></li>
-                <li><a href="#">料金のご案内</a></li>
-                <li><a href="#">会社概要</a></li>
-            </ul>
+            <button id="nav-top" class="active" onclick="showTab('top')">トップ</button>
+            <button id="nav-service" onclick="showTab('service')">サービス案内</button>
+            <button id="nav-company" onclick="showTab('company')">会社概要</button>
         </nav>
     </header>
 
     <div class="container">
-        <div class="hero-title">
-            <h1>お荷物状況のご確認</h1>
-            <p>追跡番号（お問い合わせ番号）を入力してください。</p>
-        </div>
+        <!-- トップページ（追跡機能あり） -->
+        <div id="tab-top" class="tab-content active">
+            <h2>お荷物追跡</h2>
+            <p style="margin-bottom: 1rem; font-size: 0.9rem; color: #555;">
+                安全製品出荷様からの受託のみ受理しております。その他会社の製品は担当しておりません。<br>
+                配達予定日より早く届く場合があります。ご了承ください。
+            </p>
 
-        <div class="search-card">
             <div class="search-box">
-                <input type="text" id="trackingInput" class="search-input" placeholder="例: JP37838" autocomplete="off">
-                <button class="search-btn" onclick="trackPackage()">追跡する</button>
+                <input type="text" id="trackingCode" placeholder="追跡番号を入力">
+                <button class="btn" onclick="startTracking()">追跡</button>
             </div>
-            <div class="sample-codes">
-                テスト用追跡コード（クリックで入力）:
-                <span class="sample-tag" onclick="fillSample('JP37838')">JP37838</span>
-                <span class="sample-tag" onclick="fillSample('LP38484')">LP38484</span>
-                <span class="sample-tag" onclick="fillSample('CJ73388')">CJ73388</span>
-                <span class="sample-tag" onclick="fillSample('LP87346')">LP87346</span>
-            </div>
-        </div>
 
-        <!-- 正常結果表示 -->
-        <div id="resultCard" class="result-card">
-            <div class="result-header">
-                <div>
-                    <span style="font-size: 0.85rem; color: var(--text-sub);">追跡番号</span>
-                    <div id="displayNumber" class="tracking-number-display"></div>
+            <div id="trackingResult" style="display: none;">
+                <div class="result-box">
+                    <div><strong>追跡番号：</strong> <span id="resCode"></span></div>
+                    <div><strong>現在の状況：</strong> <span id="resStatus" class="status-badge"></span></div>
+                    <div><strong>配達予定日：</strong> <span id="resDate"></span></div>
+                    <div id="driverMsgBox" class="message-box" style="display: none;">
+                        <strong>配達員からのメッセージ：</strong> <span id="resMsg"></span>
+                    </div>
                 </div>
-                <div id="displayStatusBadge" class="status-badge"></div>
+
+                <div class="timeline" id="timelineArea"></div>
             </div>
 
-            <div class="timeline" id="timelineList">
-                <!-- JavaScriptで動的生成 -->
+            <div id="trackingError" class="result-box error-msg" style="display: none;">
+                追跡不可能
             </div>
         </div>
 
-        <!-- エラー表示 -->
-        <div id="errorCard" class="error-card">
-            ⚠️ 追跡不可能<br>
-            <span style="font-size: 0.9rem; font-weight: normal;">入力された追跡番号はお取り扱いがないか、番号が誤っている可能性があります。</span>
+        <!-- サービス案内 -->
+        <div id="tab-service" class="tab-content">
+            <h2>サービス案内</h2>
+            <div style="margin-top: 1rem;">
+                <h3>■ 中国ー日本 直行スピードルート配送</h3>
+                <p>中国の現地倉庫から日本国内の配達先まで、中間コストやロスタイムを極限まで削ぎ落とした最短・安全ルートでお届けします。</p>
+                <br>
+                <h3>■ 徹底された安全・品質管理体制</h3>
+                <p>「安全製品出荷」様の製品に特化し、壊れやすい荷物や精密品も独自の厳重な輸送基準で一貫してお取り扱いしております。</p>
+                <br>
+                <h3>■ 配達員ダイレクト連携システム</h3>
+                <p>現場の配達員からお客様へ、リアルタイムな配送状況や注意事項をメッセージ（C欄）でお知らせする直接連絡システムを導入しています。</p>
+            </div>
+        </div>
+
+        <!-- 会社概要 -->
+        <div id="tab-company" class="tab-content">
+            <h2>会社概要</h2>
+            <div style="margin-top: 1rem;">
+                <p>この配達業者は、中国ー日本国内地域までの配達業者です。</p>
+                <p>安全产品出荷　からの受託を配達しております。</p>
+                <p>連絡は <a href="mailto:ased8331@gmail.com">ased8331@gmail.com</a> にお願いします。</p>
+                <br>
+                <p style="color: #666; font-size: 0.9rem;">
+                    ※キャンセル申請をした場合でも国内に到着済みの場合、送料をいただく場合があります。ご了承ください。
+                </p>
+            </div>
         </div>
     </div>
 
-    <footer>
-        &copy; 安全送達株式会社 (Anzen Soutatsu Express Co., Ltd.) All Rights Reserved.
-    </footer>
-
     <script>
-        // 1〜18のステータスマスター
+        // B欄の数字に対するステータスマスター
         const statusMaster = {
             1: "注文受理",
             2: "お支払い確認済み",
@@ -371,84 +242,116 @@
             18: "配達済み"
         };
 
-        // スプレッドシート記載の追跡データベース
-        const trackingDatabase = {
-            "LP87346": 2,
-            "LP43354": 2,
-            "JP37838": 11,
-            "CJ73388": 3,
-            "LP38484": 4,
-            "JP44748": 1,
-            "LP55437": 1,
-            "JP74335": 1,
-            "LP6468Y": 1,
-            "JP77543": 1,
-            "LP64334": 3,
-            "JP54777": 1,
-            "CJ38838": 1
+        // スプレッドシートのデータ（A欄: 追跡コード, B欄: 数字, C欄: メッセージ）[span_0](start_span)[span_0](end_span)
+        // ※B欄が空欄のコードは自動で「1（注文受理）」になります[span_1](start_span)[span_1](end_span)。
+        const sheetData = {
+            "LP87346": { b: 2, c: "処理済み" },
+            "LP43354": { b: 2, c: "" },
+            "JP37838": { b: 11, c: "" },
+            "CJ73388": { b: 3, c: "" },
+            "JP38949": { b: 1, c: "" },
+            "LP38484": { b: 4, c: "処理済み" },
+            "JP44748": { b: 1, c: "" },
+            "LP55437": { b: 1, c: "" },
+            "JP74335": { b: 1, c: "" },
+            "LP6468Y": { b: 1, c: "" },
+            "JP77543": { b: 1, c: "" },
+            "LP64334": { b: 3, c: "" },
+            "JP54777": { b: 1, c: "" },
+            "CJ38838": { b: 1, c: "" },
+            "CJ74437": { b: 1, c: "" }
         };
 
-        // サンプルコード入力用
-        function fillSample(code) {
-            document.getElementById('trackingInput').value = code;
-            trackPackage();
+        let currentCode = null;
+        let timer = null;
+
+        function showTab(tabName) {
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+            document.querySelectorAll('nav button').forEach(el => el.classList.remove('active'));
+
+            document.getElementById('tab-' + tabName).classList.add('active');
+            document.getElementById('nav-' + tabName).classList.add('active');
         }
 
-        // 追跡実行処理
-        function trackPackage() {
-            const inputVal = document.getElementById('trackingInput').value.trim().toUpperCase();
-            const resultCard = document.getElementById('resultCard');
-            const errorCard = document.getElementById('errorCard');
-            const timelineList = document.getElementById('timelineList');
+        function formatDate(d) {
+            return `${d.getFullYear()}年${d.getMonth() + 1}月${d.getDate()}日`;
+        }
 
-            if (!inputVal) {
-                alert('追跡番号を入力してください。');
-                return;
-            }
-
-            // データベース参照
-            const currentStatusStep = trackingDatabase[inputVal];
-
-            if (currentStatusStep === undefined) {
-                // 存在しない場合：追跡不可能
-                resultCard.style.display = 'none';
-                errorCard.style.display = 'block';
+        function getDeliveryDate(code) {
+            const today = new Date();
+            if (code.startsWith("AM")) {
+                // AMから始まる追跡番号：翌日〜翌々日
+                const d1 = new Date(today); d1.setDate(today.getDate() + 1);
+                const d2 = new Date(today); d2.setDate(today.getDate() + 2);
+                return `${formatDate(d1)} 〜 ${formatDate(d2)}`;
             } else {
-                // 存在する場合：結果とタイムラインを表示
-                errorCard.style.display = 'none';
-                resultCard.style.display = 'block';
-
-                document.getElementById('displayNumber').innerText = inputVal;
-                document.getElementById('displayStatusBadge').innerText = statusMaster[currentStatusStep];
-
-                // タイムラインHTMLの構築（1〜18）
-                let timelineHTML = '';
-                for (let i = 1; i <= 18; i++) {
-                    let itemClass = '';
-                    if (i < currentStatusStep) {
-                        itemClass = 'completed';
-                    } else if (i === currentStatusStep) {
-                        itemClass = 'active';
-                    }
-
-                    timelineHTML += `
-                        <div class="timeline-item ${itemClass}">
-                            <div class="timeline-icon"></div>
-                            <span class="step-num">Step ${i}</span>
-                            <span class="status-title">${statusMaster[i]}</span>
-                        </div>
-                    `;
-                }
-                timelineList.innerHTML = timelineHTML;
+                // 通常の追跡番号：1週間後〜3週間後
+                const d1 = new Date(today); d1.setDate(today.getDate() + 7);
+                const d2 = new Date(today); d2.setDate(today.getDate() + 21);
+                return `${formatDate(d1)} 〜 ${formatDate(d2)}`;
             }
         }
 
-        // Enterキーで検索実行
-        document.getElementById('trackingInput').addEventListener('keypress', function(e) {
-            if (e.key === 'Enter') {
-                trackPackage();
+        function updateTrackingUI() {
+            if (!currentCode) return;
+
+            const resBox = document.getElementById('trackingResult');
+            const errBox = document.getElementById('trackingError');
+
+            const item = sheetData[currentCode];
+
+            if (!item) {
+                resBox.style.display = "none";
+                errBox.style.display = "block";
+            } else {
+                errBox.style.display = "none";
+                resBox.style.display = "block";
+
+                // B欄の数値を取得（数値なし・空欄なら1）
+                const statusNum = item.b ? parseInt(item.b, 10) : 1;
+                const statusText = statusMaster[statusNum] || statusMaster[1];
+                const msg = item.c || "";
+
+                document.getElementById('resCode').innerText = currentCode;
+                document.getElementById('resStatus').innerText = statusText;
+                document.getElementById('resDate').innerText = getDeliveryDate(currentCode);
+
+                // C欄のメッセージ表示
+                const msgBox = document.getElementById('driverMsgBox');
+                if (msg) {
+                    msgBox.style.display = "block";
+                    document.getElementById('resMsg').innerText = msg;
+                } else {
+                    msgBox.style.display = "none";
+                }
+
+                // 1〜18のリスト生成
+                let html = "";
+                for (let i = 1; i <= 18; i++) {
+                    let cls = "";
+                    if (i < statusNum) cls = "timeline-item done";
+                    else if (i === statusNum) cls = "timeline-item current";
+                    else cls = "timeline-item";
+
+                    html += `<div class="${cls}">Step ${i}: ${statusMaster[i]}</div>`;
+                }
+                document.getElementById('timelineArea').innerHTML = html;
             }
-        });
+        }
+
+        function startTracking() {
+            const input = document.getElementById('trackingCode').value.trim().toUpperCase();
+            if (!input) return;
+
+            currentCode = input;
+            updateTrackingUI();
+
+            // 1秒ごとに自動更新
+            if (timer) clearInterval(timer);
+            timer = setInterval(() => {
+                updateTrackingUI();
+            }, 1000);
+        }
     </script>
 </body>
 </html>
