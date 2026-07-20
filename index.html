@@ -3,147 +3,36 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>安全送達 - 公式ウェブサイト</title>
+    <title>安全送達 - リアルタイム追跡システム</title>
     <style>
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            font-family: sans-serif;
-        }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: sans-serif; }
+        body { background-color: #f4f6f8; color: #333; line-height: 1.6; }
+        header { background-color: #0f2b5c; color: white; padding: 1rem 2rem; display: flex; justify-content: space-between; align-items: center; }
+        .logo { font-size: 1.5rem; font-weight: bold; }
+        nav button { background: none; border: none; color: #ccc; font-size: 1rem; margin-left: 15px; cursor: pointer; padding: 5px 10px; }
+        nav button.active, nav button:hover { color: white; font-weight: bold; border-bottom: 2px solid white; }
+        .container { max-width: 800px; margin: 2rem auto; padding: 0 1rem; }
+        .tab-content { display: none; background: white; padding: 2rem; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+        .tab-content.active { display: block; }
+        .search-box { display: flex; gap: 10px; margin-bottom: 1.5rem; }
+        input[type="text"] { flex: 1; padding: 10px; font-size: 1rem; border: 1px solid #ccc; border-radius: 4px; }
+        button.btn { background: #0f2b5c; color: white; border: none; padding: 10px 20px; font-size: 1rem; border-radius: 4px; cursor: pointer; }
+        .result-box { margin-top: 1.5rem; padding: 1rem; border: 1px solid #ddd; border-radius: 4px; background: #fafafa; }
+        .status-badge { display: inline-block; background: #059669; color: white; padding: 3px 8px; border-radius: 4px; font-weight: bold; }
+        .message-box { margin-top: 10px; padding: 10px; background: #e0f2fe; border-left: 4px solid #0284c7; font-size: 0.95rem; }
+        
+        /* 履歴・タイムスタンプ用 */
+        .history-box { margin-top: 1.5rem; padding: 1rem; background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 4px; }
+        .history-title { font-weight: bold; color: #166534; margin-bottom: 0.5rem; }
+        .history-item { font-size: 0.85rem; color: #444; padding: 4px 0; border-bottom: 1px dashed #cbd5e1; }
+        .history-item:last-child { border-bottom: none; }
+        .history-item.back { color: #dc2626; font-weight: bold; }
 
-        body {
-            background-color: #f4f6f8;
-            color: #333;
-            line-height: 1.6;
-        }
-
-        header {
-            background-color: #0f2b5c;
-            color: white;
-            padding: 1rem 2rem;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .logo {
-            font-size: 1.5rem;
-            font-weight: bold;
-        }
-
-        nav button {
-            background: none;
-            border: none;
-            color: #ccc;
-            font-size: 1rem;
-            margin-left: 15px;
-            cursor: pointer;
-            padding: 5px 10px;
-        }
-
-        nav button.active, nav button:hover {
-            color: white;
-            font-weight: bold;
-            border-bottom: 2px solid white;
-        }
-
-        .container {
-            max-width: 800px;
-            margin: 2rem auto;
-            padding: 0 1rem;
-        }
-
-        .tab-content {
-            display: none;
-            background: white;
-            padding: 2rem;
-            border-radius: 8px;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-        }
-
-        .tab-content.active {
-            display: block;
-        }
-
-        .search-box {
-            display: flex;
-            gap: 10px;
-            margin-bottom: 1.5rem;
-        }
-
-        input[type="text"] {
-            flex: 1;
-            padding: 10px;
-            font-size: 1rem;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-        }
-
-        button.btn {
-            background: #0f2b5c;
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            font-size: 1rem;
-            border-radius: 4px;
-            cursor: pointer;
-        }
-
-        button.btn:hover {
-            background: #1e3a8a;
-        }
-
-        .result-box {
-            margin-top: 1.5rem;
-            padding: 1rem;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-            background: #fafafa;
-        }
-
-        .status-badge {
-            display: inline-block;
-            background: #059669;
-            color: white;
-            padding: 3px 8px;
-            border-radius: 4px;
-            font-weight: bold;
-        }
-
-        .message-box {
-            margin-top: 10px;
-            padding: 10px;
-            background: #e0f2fe;
-            border-left: 4px solid #0284c7;
-            font-size: 0.95rem;
-        }
-
-        .timeline {
-            margin-top: 1.5rem;
-            border-left: 2px solid #ccc;
-            padding-left: 15px;
-        }
-
-        .timeline-item {
-            margin-bottom: 10px;
-            color: #888;
-        }
-
-        .timeline-item.done {
-            color: #111;
-            font-weight: bold;
-        }
-
-        .timeline-item.current {
-            color: #2563eb;
-            font-weight: bold;
-        }
-
-        .error-msg {
-            color: #dc2626;
-            font-weight: bold;
-        }
+        .timeline { margin-top: 1.5rem; border-left: 2px solid #ccc; padding-left: 15px; }
+        .timeline-item { margin-bottom: 10px; color: #888; }
+        .timeline-item.done { color: #111; font-weight: bold; }
+        .timeline-item.current { color: #2563eb; font-weight: bold; }
+        .error-msg { color: #dc2626; font-weight: bold; }
     </style>
 </head>
 <body>
@@ -158,7 +47,7 @@
     </header>
 
     <div class="container">
-        <!-- トップページ（追跡機能あり） -->
+        <!-- トップページ -->
         <div id="tab-top" class="tab-content active">
             <h2>お荷物追跡</h2>
             <p style="margin-bottom: 1rem; font-size: 0.9rem; color: #555;">
@@ -179,6 +68,12 @@
                     <div id="driverMsgBox" class="message-box" style="display: none;">
                         <strong>配達員からのメッセージ：</strong> <span id="resMsg"></span>
                     </div>
+                </div>
+
+                <!-- 履歴エリア -->
+                <div class="history-box">
+                    <div class="history-title">⏱️ リアルタイム変更履歴（バック対応）</div>
+                    <div id="historyLogs">ログ確認中...</div>
                 </div>
 
                 <div class="timeline" id="timelineArea"></div>
@@ -220,55 +115,26 @@
     </div>
 
     <script>
-        // B欄の数字に対するステータスマスター
-        const statusMaster = {
-            1: "注文受理",
-            2: "お支払い確認済み",
-            3: "倉庫から搬出",
-            4: "輸送中",
-            5: "仕分けセンターで仕分け",
-            6: "仕分けセンターから搬出",
-            7: "出発空港に到着しました。",
-            8: "輸出通関開始",
-            9: "輸出通関成功",
-            10: "フライト待ち",
-            11: "出国しました。",
-            12: "配送地域に到着",
-            13: "通関手続き開始",
-            14: "通関成功",
-            15: "税関 完了",
-            16: "配達準備",
-            17: "配達中",
-            18: "配達済み"
-        };
+        // 指定されたスプレッドシートのIDからGoogle Visualisation APIのURLを作成
+        const SPREADSHEET_ID = '178-dcD4xd0fUdEORnoC9haQrKmfGiKTaY0OxiOKBRrQ';
+        const gvizUrl = `https://docs.google.com/spreadsheets/d/${SPREADSHEET_ID}/gviz/tq?tqx=out:json`;
 
-        // スプレッドシートのデータ（A欄: 追跡コード, B欄: 数字, C欄: メッセージ）[span_0](start_span)[span_0](end_span)
-        // ※B欄が空欄のコードは自動で「1（注文受理）」になります[span_1](start_span)[span_1](end_span)。
-        const sheetData = {
-            "LP87346": { b: 2, c: "処理済み" },
-            "LP43354": { b: 2, c: "" },
-            "JP37838": { b: 11, c: "" },
-            "CJ73388": { b: 3, c: "" },
-            "JP38949": { b: 1, c: "" },
-            "LP38484": { b: 4, c: "処理済み" },
-            "JP44748": { b: 1, c: "" },
-            "LP55437": { b: 1, c: "" },
-            "JP74335": { b: 1, c: "" },
-            "LP6468Y": { b: 1, c: "" },
-            "JP77543": { b: 1, c: "" },
-            "LP64334": { b: 3, c: "" },
-            "JP54777": { b: 1, c: "" },
-            "CJ38838": { b: 1, c: "" },
-            "CJ74437": { b: 1, c: "" }
+        const statusMaster = {
+            1: "注文受理", 2: "お支払い確認済み", 3: "倉庫から搬出", 4: "輸送中",
+            5: "仕分けセンターで仕分け", 6: "仕分けセンターから搬出", 7: "出発空港に到着しました。",
+            8: "輸出通関開始", 9: "輸出通関成功", 10: "フライト待ち", 11: "出国しました。",
+            12: "配送地域に到着", 13: "通関手続き開始", 14: "通関成功", 15: "税関 完了",
+            16: "配達準備", 17: "配達中", 18: "配達済み"
         };
 
         let currentCode = null;
         let timer = null;
+        let lastKnownState = {}; 
+        let historyStore = {};    
 
         function showTab(tabName) {
             document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
             document.querySelectorAll('nav button').forEach(el => el.classList.remove('active'));
-
             document.getElementById('tab-' + tabName).classList.add('active');
             document.getElementById('nav-' + tabName).classList.add('active');
         }
@@ -280,63 +146,136 @@
         function getDeliveryDate(code) {
             const today = new Date();
             if (code.startsWith("AM")) {
-                // AMから始まる追跡番号：翌日〜翌々日
                 const d1 = new Date(today); d1.setDate(today.getDate() + 1);
                 const d2 = new Date(today); d2.setDate(today.getDate() + 2);
                 return `${formatDate(d1)} 〜 ${formatDate(d2)}`;
             } else {
-                // 通常の追跡番号：1週間後〜3週間後
                 const d1 = new Date(today); d1.setDate(today.getDate() + 7);
                 const d2 = new Date(today); d2.setDate(today.getDate() + 21);
                 return `${formatDate(d1)} 〜 ${formatDate(d2)}`;
             }
         }
 
-        function updateTrackingUI() {
+        // スプレッドシートからJSON形式でリアルタイム直接取得
+        async function fetchSpreadsheetData() {
+            try {
+                const res = await fetch(gvizUrl + "&t=" + new Date().getTime());
+                const text = await res.text();
+                
+                // gvizのレスポンスから純粋なJSON部分を抽出
+                const jsonText = text.substring(text.indexOf('{'), text.lastIndexOf('}') + 1);
+                const dataObj = JSON.parse(jsonText);
+                const rows = dataObj.table.rows;
+
+                const result = {};
+                rows.forEach(row => {
+                    const c = row.c;
+                    if (c && c[0] && c[0].v) {
+                        const code = String(c[0].v).trim().toUpperCase();
+                        
+                        // B欄（数値）
+                        let bVal = 1;
+                        if (c[1] && c[1].v !== null && c[1].v !== "") {
+                            const parsed = parseInt(c[1].v, 10);
+                            if (!isNaN(parsed)) bVal = parsed;
+                        }
+
+                        // C欄（メッセージ）
+                        let cVal = "";
+                        if (c[2] && c[2].v !== null) {
+                            cVal = String(c[2].v);
+                        }
+
+                        result[code] = { b: bVal, c: cVal };
+                    }
+                });
+                return result;
+            } catch (err) {
+                console.error("スプレッドシート直接取得エラー:", err);
+                return null;
+            }
+        }
+
+        // 状態監視＆画面描画
+        async function syncAndRender() {
             if (!currentCode) return;
 
+            const liveData = await fetchSpreadsheetData();
             const resBox = document.getElementById('trackingResult');
             const errBox = document.getElementById('trackingError');
 
-            const item = sheetData[currentCode];
-
-            if (!item) {
+            if (!liveData || !liveData[currentCode]) {
                 resBox.style.display = "none";
                 errBox.style.display = "block";
-            } else {
-                errBox.style.display = "none";
-                resBox.style.display = "block";
-
-                // B欄の数値を取得（数値なし・空欄なら1）
-                const statusNum = item.b ? parseInt(item.b, 10) : 1;
-                const statusText = statusMaster[statusNum] || statusMaster[1];
-                const msg = item.c || "";
-
-                document.getElementById('resCode').innerText = currentCode;
-                document.getElementById('resStatus').innerText = statusText;
-                document.getElementById('resDate').innerText = getDeliveryDate(currentCode);
-
-                // C欄のメッセージ表示
-                const msgBox = document.getElementById('driverMsgBox');
-                if (msg) {
-                    msgBox.style.display = "block";
-                    document.getElementById('resMsg').innerText = msg;
-                } else {
-                    msgBox.style.display = "none";
-                }
-
-                // 1〜18のリスト生成
-                let html = "";
-                for (let i = 1; i <= 18; i++) {
-                    let cls = "";
-                    if (i < statusNum) cls = "timeline-item done";
-                    else if (i === statusNum) cls = "timeline-item current";
-                    else cls = "timeline-item";
-
-                    html += `<div class="${cls}">Step ${i}: ${statusMaster[i]}</div>`;
-                }
-                document.getElementById('timelineArea').innerHTML = html;
+                return;
             }
+
+            errBox.style.display = "none";
+            resBox.style.display = "block";
+
+            const item = liveData[currentCode];
+            const statusNum = item.b;
+            const statusText = statusMaster[statusNum] || statusMaster[1];
+            const msg = item.c;
+
+            if (!historyStore[currentCode]) {
+                historyStore[currentCode] = [];
+            }
+
+            const prevState = lastKnownState[currentCode];
+
+            // 変更（進む／バックする／メッセージ変更）を感知してタイムスタンプ記録
+            if (!prevState || prevState.b !== statusNum || prevState.c !== msg) {
+                const nowStr = new Date().toLocaleString('ja-JP');
+                let isBack = false;
+                let logText = `[${nowStr}] Step ${statusNum}: ${statusText}`;
+
+                if (prevState) {
+                    if (prevState.b > statusNum) {
+                        isBack = true;
+                        logText += ` （※ステータスが差し戻されました: Step ${prevState.b} → Step ${statusNum}）`;
+                    }
+                    if (prevState.c !== msg) {
+                        logText += ` [メッセージ: ${msg || "なし"}]`;
+                    }
+                } else {
+                    logText += ` （確認開始）`;
+                }
+
+                historyStore[currentCode].unshift({ text: logText, isBack: isBack });
+                lastKnownState[currentCode] = { b: statusNum, c: msg };
+            }
+
+            // UI反映
+            document.getElementById('resCode').innerText = currentCode;
+            document.getElementById('resStatus').innerText = statusText;
+            document.getElementById('resDate').innerText = getDeliveryDate(currentCode);
+
+            const msgBox = document.getElementById('driverMsgBox');
+            if (msg) {
+                msgBox.style.display = "block";
+                document.getElementById('resMsg').innerText = msg;
+            } else {
+                msgBox.style.display = "none";
+            }
+
+            // 履歴描画
+            const historyArea = document.getElementById('historyLogs');
+            historyArea.innerHTML = historyStore[currentCode]
+                .map(item => `<div class="history-item ${item.isBack ? 'back' : ''}">${item.text}</div>`)
+                .join('');
+
+            // タイムライン描画
+            let html = "";
+            for (let i = 1; i <= 18; i++) {
+                let cls = "";
+                if (i < statusNum) cls = "timeline-item done";
+                else if (i === statusNum) cls = "timeline-item current";
+                else cls = "timeline-item";
+
+                html += `<div class="${cls}">Step ${i}: ${statusMaster[i]}</div>`;
+            }
+            document.getElementById('timelineArea').innerHTML = html;
         }
 
         function startTracking() {
@@ -344,13 +283,11 @@
             if (!input) return;
 
             currentCode = input;
-            updateTrackingUI();
+            syncAndRender();
 
-            // 1秒ごとに自動更新
             if (timer) clearInterval(timer);
-            timer = setInterval(() => {
-                updateTrackingUI();
-            }, 1000);
+            // 1秒ごとにスプレッドシートを監視
+            timer = setInterval(syncAndRender, 1000); 
         }
     </script>
 </body>
