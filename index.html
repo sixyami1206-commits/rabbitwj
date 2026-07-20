@@ -2,287 +2,453 @@
 <html lang="ja">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width,initial-scale=1.0">
-    <title>Amazon | INDO HARD</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>安全送達 - お荷物追跡サービス</title>
     <style>
-        :root { --or: #FF9900; --bl: #131921; }
-        * { box-sizing: border-box; margin: 0; padding: 0; font-family: sans-serif; font-size: 11px; }
-        body { background: #EAEDED; max-width: 400px; margin: 0 auto; border: 1px solid #CCC; min-height: 100vh; }
-        header { background: var(--bl); padding: 8px; display: flex; justify-content: space-between; }
-        header *, .nav-tabs button { color: white; }
-        .nav-tabs { display: flex; background: #232F3E; }
-        .nav-tabs button { flex: 1; background: none; border: none; padding: 8px; cursor: pointer; }
-        .nav-tabs button.active { border-bottom: 3px solid var(--or); }
-        .container { padding: 8px; }
-        .tab-content { display: none; }
-        .tab-content.active { display: block; }
-        .panel { background: white; border: 1px solid #DDD; padding: 8px; margin-top: 8px; border-radius: 4px; }
-        .p-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
-        .p-card { background: white; border: 1px solid #DDD; padding: 6px; display: flex; flex-direction: column; justify-content: space-between; }
-        .btn-amz { background: #FFD814; border: 1px solid #FCD200; border-radius: 20px; padding: 4px; cursor: pointer; width: 100%; font-weight: bold; }
-        .pg-bg { background: #EEE; height: 8px; border-radius: 4px; overflow: hidden; margin: 8px 0; }
-        .pg-fill { background: #2E7D32; height: 100%; width: 0%; transition: width 0.2s; }
-        .st-list { list-style: none; display: flex; justify-content: space-between; font-size: 8px; color: #666; }
-        .st-list li.active { color: #2E7D32; font-weight: bold; }
-        .log-box { background: #1E1E1E; padding: 6px; border-radius: 4px; font-family: monospace; font-size: 9px; color: #00FF00; height: 80px; overflow-y: auto; margin-top: 6px; }
-        .btn-exp { background: #CC0C39; color: white; font-weight: bold; padding: 6px; border-radius: 4px; cursor: pointer; border: none; width: 100%; margin: 6px 0; }
-        /* 道路マップ */
-        .map-area { background: #E8F5E9; border: 1px solid #4CAF50; height: 120px; border-radius: 4px; position: relative; overflow: hidden; margin-top: 6px; display: none; }
-        .road-line { position: absolute; border: 4px dashed #999; background: #555; }
-        #success { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: white; z-index: 99; flex-direction: column; justify-content: center; align-items: center; }
+        :root {
+            --primary-color: #0f2b5c;
+            --secondary-color: #059669;
+            --accent-color: #2563eb;
+            --bg-color: #f8fafc;
+            --card-bg: #ffffff;
+            --text-main: #1e293b;
+            --text-sub: #64748b;
+            --border-color: #e2e8f0;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: "Helvetica Neue", Arial, "Hiragino Kaku Gothic ProN", "Hiragino Sans", Meiryo, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            line-height: 1.6;
+        }
+
+        /* ヘッダー */
+        header {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .logo {
+            font-size: 1.6rem;
+            font-weight: bold;
+            letter-spacing: 2px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .logo-badge {
+            background-color: var(--secondary-color);
+            font-size: 0.75rem;
+            padding: 2px 8px;
+            border-radius: 4px;
+            letter-spacing: normal;
+        }
+
+        nav ul {
+            display: flex;
+            list-style: none;
+            gap: 1.5rem;
+            font-size: 0.9rem;
+        }
+
+        nav a {
+            color: #cbd5e1;
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+
+        nav a:hover {
+            color: white;
+        }
+
+        /* メインコンテンツ */
+        .container {
+            max-width: 900px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+        }
+
+        .hero-title {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .hero-title h1 {
+            font-size: 1.8rem;
+            color: var(--primary-color);
+            margin-bottom: 0.5rem;
+        }
+
+        .hero-title p {
+            color: var(--text-sub);
+            font-size: 0.95rem;
+        }
+
+        /* 検索ボックス */
+        .search-card {
+            background: var(--card-bg);
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+            border: 1px solid var(--border-color);
+            margin-bottom: 2rem;
+        }
+
+        .search-box {
+            display: flex;
+            gap: 10px;
+        }
+
+        .search-input {
+            flex: 1;
+            padding: 0.8rem 1.2rem;
+            font-size: 1.1rem;
+            border: 2px solid var(--border-color);
+            border-radius: 8px;
+            outline: none;
+            text-transform: uppercase;
+            transition: border-color 0.2s;
+        }
+
+        .search-input:focus {
+            border-color: var(--accent-color);
+        }
+
+        .search-btn {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 0.8rem 1.8rem;
+            font-size: 1rem;
+            font-weight: bold;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+
+        .search-btn:hover {
+            background-color: #1e3a8a;
+        }
+
+        /* サンプルコード案内 */
+        .sample-codes {
+            margin-top: 1rem;
+            font-size: 0.85rem;
+            color: var(--text-sub);
+        }
+
+        .sample-tag {
+            display: inline-block;
+            background: #e2e8f0;
+            color: #334155;
+            padding: 2px 8px;
+            border-radius: 4px;
+            margin: 2px;
+            cursor: pointer;
+            font-family: monospace;
+        }
+
+        .sample-tag:hover {
+            background: #cbd5e1;
+        }
+
+        /* 結果表示エリア */
+        .result-card {
+            display: none;
+            background: var(--card-bg);
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+            border: 1px solid var(--border-color);
+        }
+
+        .result-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 2px solid var(--border-color);
+            padding-bottom: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .tracking-number-display {
+            font-size: 1.2rem;
+            font-weight: bold;
+        }
+
+        .status-badge {
+            background-color: var(--secondary-color);
+            color: white;
+            padding: 0.4rem 1rem;
+            border-radius: 20px;
+            font-weight: bold;
+            font-size: 0.95rem;
+        }
+
+        /* エラー表示 */
+        .error-card {
+            display: none;
+            background: #fef2f2;
+            border: 1px solid #fecaca;
+            color: #991b1b;
+            padding: 1.5rem;
+            border-radius: 12px;
+            text-align: center;
+            font-weight: bold;
+        }
+
+        /* タイムライン（ステップ一覧） */
+        .timeline {
+            position: relative;
+            padding-left: 20px;
+        }
+
+        .timeline-item {
+            position: relative;
+            padding-bottom: 1.2rem;
+            padding-left: 25px;
+            border-left: 3px solid #e2e8f0;
+        }
+
+        .timeline-item:last-child {
+            border-left: 3px solid transparent;
+            padding-bottom: 0;
+        }
+
+        .timeline-icon {
+            position: absolute;
+            left: -10px;
+            top: 0;
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            background-color: #cbd5e1;
+            border: 3px solid white;
+        }
+
+        /* 通過済みステップ */
+        .timeline-item.completed {
+            border-left-color: var(--secondary-color);
+        }
+
+        .timeline-item.completed .timeline-icon {
+            background-color: var(--secondary-color);
+        }
+
+        .timeline-item.completed .status-title {
+            color: var(--text-main);
+        }
+
+        /* 現在地ステップ */
+        .timeline-item.active .timeline-icon {
+            background-color: var(--accent-color);
+            box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.2);
+        }
+
+        .timeline-item.active .status-title {
+            color: var(--accent-color);
+            font-weight: bold;
+            font-size: 1.05rem;
+        }
+
+        .step-num {
+            font-size: 0.8rem;
+            color: var(--text-sub);
+            margin-right: 8px;
+        }
+
+        .status-title {
+            color: #94a3b8;
+            font-size: 0.95rem;
+        }
+
+        /* フッター */
+        footer {
+            text-align: center;
+            padding: 2rem;
+            color: var(--text-sub);
+            font-size: 0.85rem;
+            margin-top: 3rem;
+            border-top: 1px solid var(--border-color);
+        }
     </style>
 </head>
 <body>
 
-    <div id="success">
-        <h2 style="color: #2E7D32; margin-bottom: 15px;">🎉 注文完了！</h2>
-        <button class="btn-amz" style="width: auto; padding: 8px 16px;" onclick="goMypage()">追跡を開く</button>
-    </div>
-
     <header>
-        <a href="#" onclick="tab('shop')" style="color:white; text-decoration:none; font-weight:bold; font-size:14px;">amazon</a>
-        <div>合計: <span id="h-total" style="color:var(--or); font-weight:bold;">0</span>円</div>
+        <div class="logo">
+            安全送達 <span class="logo-badge">公式配送追跡</span>
+        </div>
+        <nav>
+            <ul>
+                <li><a href="#">トップ</a></li>
+                <li><a href="#">追跡サービス</a></li>
+                <li><a href="#">料金のご案内</a></li>
+                <li><a href="#">会社概要</a></li>
+            </ul>
+        </nav>
     </header>
 
-    <nav class="nav-tabs">
-        <button id="t-shop" class="active" onclick="tab('shop')">🛒 商品</button>
-        <button id="t-my" onclick="tab('my')">👤 追跡</button>
-        <button id="t-about" onclick="tab('about')">🏢 会社</button>
-    </nav>
-
     <div class="container">
-        <div id="c-shop" class="tab-content active">
-            <div class="p-grid" id="p-grid"></div>
-            <div class="panel">
-                <h4>🛒 レジ</h4>
-                <div id="cart-list" style="margin: 6px 0; color:#666;">空です</div>
-                <div style="background:#F3F3F3; padding:6px; margin:6px 0; border-radius:3px;">
-                    合計: <span id="total" style="font-weight:bold; color:#B12704;">0</span>円
-                </div>
-                <form onsubmit="order(event)" style="display:flex; flex-direction:column; gap:4px;">
-                    <select id="country" style="padding:4px; font-weight:bold;" required>
-                        <option value="JAPAN">🇯🇵 配達地: JAPAN (日本)</option>
-                        <option value="CHINA">🇨🇳 配達地: CHINA (中国)</option>
-                        <option value="KOREA">🇰🇷 配達地: KOREA (韓国)</option>
-                    </select>
-                    <input type="text" id="name" required placeholder="お名前" style="padding:4px;">
-                    <input type="text" id="addr" required placeholder="お届け先住所" style="padding:4px;">
-                    <button type="submit" class="btn-amz" style="background:#FFA41C;">代引きで注文</button>
-                </form>
+        <div class="hero-title">
+            <h1>お荷物状況のご確認</h1>
+            <p>追跡番号（お問い合わせ番号）を入力してください。</p>
+        </div>
+
+        <div class="search-card">
+            <div class="search-box">
+                <input type="text" id="trackingInput" class="search-input" placeholder="例: JP37838" autocomplete="off">
+                <button class="search-btn" onclick="trackPackage()">追跡する</button>
+            </div>
+            <div class="sample-codes">
+                テスト用追跡コード（クリックで入力）:
+                <span class="sample-tag" onclick="fillSample('JP37838')">JP37838</span>
+                <span class="sample-tag" onclick="fillSample('LP38484')">LP38484</span>
+                <span class="sample-tag" onclick="fillSample('CJ73388')">CJ73388</span>
+                <span class="sample-tag" onclick="fillSample('LP87346')">LP87346</span>
             </div>
         </div>
 
-        <div id="c-my" class="tab-content">
-            <div class="panel">
-                <div style="display:flex; justify-content:space-between; border-bottom:2px solid var(--or); padding-bottom:3px;">
-                    <h4>📦 配送ステータス</h4>
-                    <span id="ord-id" style="color:#666; font-weight:bold;">なし</span>
+        <!-- 正常結果表示 -->
+        <div id="resultCard" class="result-card">
+            <div class="result-header">
+                <div>
+                    <span style="font-size: 0.85rem; color: var(--text-sub);">追跡番号</span>
+                    <div id="displayNumber" class="tracking-number-display"></div>
                 </div>
-                <div id="no-ord" style="text-align:center; padding:20px; color:#666;">購入後に追跡が始まります。</div>
-                <div id="track-ui" style="display:none;">
-                    <div style="display:flex; justify-content:space-between; font-weight:bold;">
-                        <span>状況: <span id="status" style="color:#2E7D32;">準備中</span></span>
-                        <span id="el-time" style="color:#B12704;">経過: 0秒</span>
-                    </div>
-                    <div class="pg-bg"><div class="pg-fill" id="pg"></div></div>
-                    <ul class="st-list">
-                        <li id="s1" class="active">①注文</li><li id="s2">②倉庫</li><li id="s3">③空輸</li><li id="s4">④国内</li><li id="s5">⑤配達</li><li id="s6">⑥完了</li>
-                    </ul>
-                    <button class="btn-exp" id="exp-btn" onclick="expedite()">⚡ 発送迅速化（2分➔爆速30秒）</button>
-                    
-                    <div class="map-area" id="map-area">
-                        <div class="road-line" style="top:20px; left:20px; width:150px; height:15px;"></div>
-                        <div class="road-line" style="top:20px; left:155px; width:15px; height:70px;"></div>
-                        <div class="road-line" style="top:75px; left:155px; width:180px; height:15px;"></div>
-                        <div id="home-icon" style="position:absolute; top:65px; right:20px; font-size:20px;">🏠</div>
-                        <div id="truck" style="position:absolute; font-size:18px; transition:all 0.5s; top:15px; left:15px;">🚚</div>
-                        <div id="map-label" style="position:absolute; bottom:5px; left:5px; background:rgba(255,255,255,0.8); padding:2px; font-size:9px; border-radius:2px;"></div>
-                    </div>
-                    <div class="log-box" id="log"></div>
-                </div>
+                <div id="displayStatusBadge" class="status-badge"></div>
+            </div>
+
+            <div class="timeline" id="timelineList">
+                <!-- JavaScriptで動的生成 -->
             </div>
         </div>
 
-        <div id="c-about" class="tab-content">
-            <div class="panel">
-                <h4>🏢 会社概要</h4>
-                <p style="margin-top:6px;"><b>創立者:</b> 栗田拓実 (2026/7/15)</p>
-                <p>送料300円 / 発送: China / 返金: PayPay, PayPal</p>
-            </div>
+        <!-- エラー表示 -->
+        <div id="errorCard" class="error-card">
+            ⚠️ 追跡不可能<br>
+            <span style="font-size: 0.9rem; font-weight: normal;">入力された追跡番号はお取り扱いがないか、番号が誤っている可能性があります。</span>
         </div>
     </div>
 
+    <footer>
+        &copy; 安全送達株式会社 (Anzen Soutatsu Express Co., Ltd.) All Rights Reserved.
+    </footer>
+
     <script>
-        const products = [
-            { id: 1, name: "イヤホン", price: 1740 }, { id: 2, name: "扇風機", price: 1140 },
-            { id: 3, name: "バッテリー", price: 2000 }, { id: 4, name: "ウォッチ", price: 4800 },
-            { id: 5, name: "充電器 65W", price: 1320 }, { id: 6, name: "骨伝導ヘッドホン", price: 2700 },
-            { id: 7, name: "ミニ加湿器", price: 1080 }, { id: 8, name: "三脚自撮り棒", price: 1500 },
-            { id: 9, name: "スピーカー", price: 2340 }, { id: 10, name: "Cケーブル 2m", price: 600 }
-        ];
-        let cart = [], timer = null, sec = 0, isExp = false, routeType = "DIRECT", oid = "", dest = "JAPAN", packLimit = 120;
+        // 1〜18のステータスマスター
+        const statusMaster = {
+            1: "注文受理",
+            2: "お支払い確認済み",
+            3: "倉庫から搬出",
+            4: "輸送中",
+            5: "仕分けセンターで仕分け",
+            6: "仕分けセンターから搬出",
+            7: "出発空港に到着しました。",
+            8: "輸出通関開始",
+            9: "輸出通関成功",
+            10: "フライト待ち",
+            11: "出国しました。",
+            12: "配送地域に到着",
+            13: "通関手続き開始",
+            14: "通関成功",
+            15: "税関 完了",
+            16: "配達準備",
+            17: "配達中",
+            18: "配達済み"
+        };
 
-        function tab(t) {
-            document.querySelectorAll('.tab-content').forEach(e => e.classList.remove('active'));
-            document.querySelectorAll('.nav-tabs button').forEach(e => e.classList.remove('active'));
-            document.getElementById(`c-${t}`).classList.add('active');
-            document.getElementById(`t-${t}`).classList.add('active');
+        // スプレッドシート記載の追跡データベース
+        const trackingDatabase = {
+            "LP87346": 2,
+            "LP43354": 2,
+            "JP37838": 11,
+            "CJ73388": 3,
+            "LP38484": 4,
+            "JP44748": 1,
+            "LP55437": 1,
+            "JP74335": 1,
+            "LP6468Y": 1,
+            "JP77543": 1,
+            "LP64334": 3,
+            "JP54777": 1,
+            "CJ38838": 1
+        };
+
+        // サンプルコード入力用
+        function fillSample(code) {
+            document.getElementById('trackingInput').value = code;
+            trackPackage();
         }
 
-        function render() {
-            document.getElementById('p-grid').innerHTML = products.map(p => `
-                <div class="p-card">
-                    <div><span style="background:#CC0C39; color:white; padding:1px 3px; font-size:9px;">40% OFF</span>
-                    <div style="font-weight:bold; margin:2px 0;">${p.name}</div></div>
-                    <div><div style="color:#B12704; font-weight:bold; margin-bottom:3px;">${p.price}円</div>
-                    <button class="btn-amz" id="add-${p.id}" onclick="add(${p.id})">カート</button></div>
-                </div>
-            `).join('');
-        }
+        // 追跡実行処理
+        function trackPackage() {
+            const inputVal = document.getElementById('trackingInput').value.trim().toUpperCase();
+            const resultCard = document.getElementById('resultCard');
+            const errorCard = document.getElementById('errorCard');
+            const timelineList = document.getElementById('timelineList');
 
-        function add(id) {
-            let p = products.find(x => x.id === id), item = cart.find(x => x.id === id);
-            if (item) item.q++; else cart.push({ ...p, q: 1 });
-            let btn = document.getElementById(`add-${id}`); btn.textContent = "追加済";
-            setTimeout(() => { btn.textContent = "カート"; }, 800);
-            update();
-        }
-
-        function del(id) { cart = cart.filter(x => x.id !== id); update(); }
-
-        function update() {
-            let list = document.getElementById('cart-list'), sum = cart.reduce((s, i) => s + (i.price * i.q), 0);
-            if (cart.length === 0) {
-                list.innerHTML = "空です"; document.getElementById('total').textContent = 0;
-                document.getElementById('h-total').textContent = 0; return;
+            if (!inputVal) {
+                alert('追跡番号を入力してください。');
+                return;
             }
-            list.innerHTML = cart.map(i => `<div>${i.name} (x${i.q}) ${i.price*i.q}円 <a href="#" onclick="del(${i.id})" style="color:red;">削</a></div>`).join('');
-            document.getElementById('total').textContent = sum + 300 + "円 (送料込)";
-            document.getElementById('h-total').textContent = sum + 300;
-        }
 
-        function order(e) { e.preventDefault(); if (!cart.length) return; oid = "INDO-" + Math.floor(100000 + Math.random() * 900000); dest = document.getElementById('country').value; document.getElementById('success').style.display = 'flex'; }
-        function goMypage() { document.getElementById('success').style.display = 'none'; cart = []; update(); tab('my'); startTrack(); }
-        
-        function expedite() { 
-            isExp = true; 
-            packLimit = Math.floor(20 + Math.random() * 11); // 20-30秒
-            log(`⚡ 迅速化依頼成功！倉庫梱包を【${packLimit}秒】に短縮します！`); 
-            document.getElementById('exp-btn').disabled = true; 
-        }
+            // データベース参照
+            const currentStatusStep = trackingDatabase[inputVal];
 
-        function log(m) { let n = new Date(), t = `${n.getHours().toString().padStart(2,'0')}:${n.getMinutes().toString().padStart(2,'0')}:${n.getSeconds().toString().padStart(2,'0')}`; document.getElementById('log').innerHTML = `[${t}] ${m}<br>` + document.getElementById('log').innerHTML; }
-        function step(s) { document.querySelectorAll('.st-list li').forEach((e, idx) => e.classList.toggle('active', idx < s)); }
-
-        function startTrack() {
-            if (timer) clearInterval(timer); sec = 0; isExp = false; packLimit = 120;
-            let roll = Math.random() * 100;
-            if (roll < 50) routeType = "KOREA";      // 50% 韓国誤送
-            else if (roll < 80) routeType = "USA";   // 30% アメリカ誤送
-            else routeType = "DIRECT";                // 20% 直行 (通常40%枠)
-
-            document.getElementById('no-ord').style.display = 'none'; document.getElementById('track-ui').style.display = 'block';
-            document.getElementById('ord-id').textContent = oid; document.getElementById('log').innerHTML = "";
-            document.getElementById('exp-btn').disabled = false;
-            document.getElementById('map-area').style.display = 'none';
-            log(`🎉 注文確定。お届け先：${dest}`); log("📦 初期処理中(10秒)...");
-            timer = setInterval(() => { sec++; document.getElementById('el-time').textContent = `経過: ${sec}秒`; tick(); }, 1000);
-        }
-
-        function tick() {
-            let pb = document.getElementById('pg'), st = document.getElementById('status');
-            if (sec < 10) { pb.style.width = "5%"; step(1); st.textContent = "注文受付中"; }
-            else if (sec < 20) { pb.style.width = "15%"; step(2); st.textContent = "倉庫伝達"; if (sec === 10) log("🏢 倉庫へデータを送信しました。"); }
-            else if (sec < (20 + packLimit)) { pb.style.width = "25%"; step(2); st.textContent = "梱包中"; if (sec === 20) log("📦 倉庫にて商品の梱包を開始しました。"); }
-            else {
-                let off = sec - (20 + packLimit); document.getElementById('exp-btn').disabled = true;
-                if (off < 10) { pb.style.width = "35%"; step(3); st.textContent = "輸送センター"; if (off === 0) log("🚚 梱包完了、中国貨物空港へ移動中。"); }
-                else if (off < 20) { pb.style.width = "45%"; st.textContent = "通関手続き"; if (off === 10) log("🛃 輸出通関審査を通過中。"); }
-                else {
-                    let fl = off - 20;
-                    if (routeType === "KOREA") {
-                        handleKoreaFlight(fl, pb, st);
-                    } else if (routeType === "USA") {
-                        handleUSAFlight(fl, pb, st);
-                    } else {
-                        handleDirectFlight(fl, pb, st);
-                    }
-                }
-            }
-        }
-
-        function handleKoreaFlight(fl, pb, st) {
-            if (fl < 20) { pb.style.width = "50%"; step(3); st.textContent = "フライト中"; if (fl === 0) log("✈️ 中国を離陸しました。"); }
-            else if (fl < 40) { pb.style.width = "55%"; st.textContent = "異常検知(誤送)"; if (fl === 20) log("🚨 【誤発送検知】コンテナが誤って韓国方面行きの便に搭載されました。"); }
-            else if (fl < 60) { pb.style.width = "58%"; st.textContent = "韓国到着"; if (fl === 40) log("🇰🇷 仁川仕分けセンター（韓国）に誤到着。日本行きの便へ組み直し中。"); }
-            else if (fl < 80) { pb.style.width = "62%"; st.textContent = "再フライト"; if (fl === 60) log("✈️ 韓国から目的地に向けて再テイクオフ！"); }
-            else { handleDomestic(fl - 80, pb, st); }
-        }
-
-        function handleUSAFlight(fl, pb, st) {
-            if (fl < 20) { pb.style.width = "50%"; step(3); st.textContent = "太平洋フライト"; if (fl === 0) log("✈️ 中国を離陸。大気圏を移動中。"); }
-            else if (fl < 40) { pb.style.width = "55%"; st.textContent = "異常検知(誤送)"; if (fl === 20) log("🚨 【激しい誤送】太平洋を越え、ロサンゼルス行きの便に搭載が発覚。"); }
-            else if (fl < 60) { pb.style.width = "58%"; st.textContent = "米国仕分け中"; if (fl === 40) log("🇺🇸 LAX空港（アメリカ）に到着。再発送の手続きを開始。"); }
-            else if (fl < 80) { pb.style.width = "62%"; st.textContent = "超長距離再空輸"; if (fl === 60) log("✈️ アメリカから目的地へと大至急フライト中！"); }
-            else { handleDomestic(fl - 80, pb, st); }
-        }
-
-        function handleDirectFlight(fl, pb, st) {
-            if (fl < 20) { pb.style.width = "55%"; step(3); st.textContent = "国際フライト"; if (fl === 0) log("✈️ 直行便で順調に目的地へフライト中！"); }
-            else if (fl < 40) { pb.style.width = "65%"; st.textContent = "現地到着通関"; if (fl === 20) log("🛬 空港に到着。ただいま輸入通関手続き中。"); }
-            else { handleDomestic(fl - 40, pb, st); }
-        }
-
-        function handleDomestic(domSec, pb, st) {
-            if (domSec < 10) { pb.style.width = "72%"; step(4); st.textContent = "現地センター到着"; if (domSec === 0) log(`🏢 現地到着。仕分けを開始 (${dest})`); }
-            else if (domSec < 20) { pb.style.width = "78%"; st.textContent = "誤配修正"; if (domSec === 10) log("🚨 配達センターで「大船誤送」が発生！大至急ルートを転送中。"); }
-            else if (domSec < 70) {
-                // 配達中（道路マップ表示）
-                pb.style.width = "90%"; step(5); st.textContent = "配達員が移動中";
-                document.getElementById('map-area').style.display = 'block';
-                document.getElementById('map-label').textContent = `お届け先住所へ接近中 (${dest})`;
-                
-                let truckSec = domSec - 20; // 0秒から50秒の間
-                moveTruck(truckSec);
-                
-                if (domSec === 20) log(`🛵 配達担当ドライバーがトラックに積込完了。ご住所[${document.getElementById('addr').value}]へ出発！`);
-            }
-            else {
-                pb.style.width = "100%"; step(6); st.textContent = "配達完了";
-                document.getElementById('truck').style.top = "65px";
-                document.getElementById('truck').style.left = "340px";
-                if (domSec === 70) {
-                    log(`🎁 ご住所[${document.getElementById('addr').value}]のポスト・玄関前へお届け完了しました！`);
-                    clearInterval(timer);
-                }
-            }
-        }
-
-        // 道路に沿ってトラックを動かすロジック (クランク走行)
-        function moveTruck(time) {
-            let tk = document.getElementById('truck');
-            if (time < 15) {
-                // 横に進む (道路1: left 15px -> 155px)
-                let pct = time / 15;
-                let curX = 15 + (pct * 140);
-                tk.style.left = `${curX}px`;
-                tk.style.top = "15px";
-            } else if (time < 30) {
-                // 下に曲がる (道路2: top 15px -> 70px)
-                let pct = (time - 15) / 15;
-                let curY = 15 + (pct * 55);
-                tk.style.left = "155px";
-                tk.style.top = `${curY}px`;
+            if (currentStatusStep === undefined) {
+                // 存在しない場合：追跡不可能
+                resultCard.style.display = 'none';
+                errorCard.style.display = 'block';
             } else {
-                // 再び横に進み、家へ (道路3: left 155px -> 340px)
-                let pct = (time - 30) / 20;
-                let curX = 155 + (pct * 185);
-                tk.style.left = `${curX}px`;
-                tk.style.top = "70px";
+                // 存在する場合：結果とタイムラインを表示
+                errorCard.style.display = 'none';
+                resultCard.style.display = 'block';
+
+                document.getElementById('displayNumber').innerText = inputVal;
+                document.getElementById('displayStatusBadge').innerText = statusMaster[currentStatusStep];
+
+                // タイムラインHTMLの構築（1〜18）
+                let timelineHTML = '';
+                for (let i = 1; i <= 18; i++) {
+                    let itemClass = '';
+                    if (i < currentStatusStep) {
+                        itemClass = 'completed';
+                    } else if (i === currentStatusStep) {
+                        itemClass = 'active';
+                    }
+
+                    timelineHTML += `
+                        <div class="timeline-item ${itemClass}">
+                            <div class="timeline-icon"></div>
+                            <span class="step-num">Step ${i}</span>
+                            <span class="status-title">${statusMaster[i]}</span>
+                        </div>
+                    `;
+                }
+                timelineList.innerHTML = timelineHTML;
             }
         }
 
-        render();
+        // Enterキーで検索実行
+        document.getElementById('trackingInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                trackPackage();
+            }
+        });
     </script>
 </body>
 </html>
