@@ -3,7 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>安全送達 - リアルタイム追跡システム</title>
+    <title>大和運輸 - 公式荷物追跡</title>
+    <!-- 手書き風フォント読み込み -->
+    <link href="https://fonts.googleapis.com/css2?family=Yuji+Syuku&display=swap" rel="stylesheet">
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: sans-serif; }
         body { background-color: #f4f6f8; color: #333; line-height: 1.6; }
@@ -17,17 +19,71 @@
         .search-box { display: flex; gap: 10px; margin-bottom: 1.5rem; }
         input[type="text"] { flex: 1; padding: 10px; font-size: 1rem; border: 1px solid #ccc; border-radius: 4px; }
         button.btn { background: #0f2b5c; color: white; border: none; padding: 10px 20px; font-size: 1rem; border-radius: 4px; cursor: pointer; }
+        .btn-red { background: #dc2626; margin-top: 15px; }
+        .btn-red:hover { background: #b91c1c; }
         .result-box { margin-top: 1.5rem; padding: 1rem; border: 1px solid #ddd; border-radius: 4px; background: #fafafa; }
         .status-badge { display: inline-block; background: #059669; color: white; padding: 3px 8px; border-radius: 4px; font-weight: bold; }
         .message-box { margin-top: 10px; padding: 10px; background: #e0f2fe; border-left: 4px solid #0284c7; font-size: 0.95rem; }
-        
-        /* 履歴・タイムスタンプ用 */
+
+        /* 不在通知PDF風スタイル */
+        .pdf-container {
+            margin-top: 1.5rem;
+            background: #fff;
+            border: 2px solid #333;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+            padding: 20px;
+            font-family: 'Yuji Syuku', serif, sans-serif;
+            position: relative;
+        }
+        .pdf-header {
+            text-align: center;
+            border-bottom: 2px solid #333;
+            padding-bottom: 10px;
+            margin-bottom: 15px;
+            font-size: 1.4rem;
+            font-weight: bold;
+        }
+        .pdf-body { font-size: 1.05rem; line-height: 1.8; }
+        .handwritten {
+            font-family: 'Yuji Syuku', cursive;
+            color: #0f2b5c;
+            font-weight: bold;
+        }
+        .reason-box {
+            margin: 15px 0;
+            border: 1px solid #666;
+            padding: 10px;
+            background: #fffdfa;
+        }
+        .stamp-area {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            margin-top: 20px;
+            border-top: 1px dashed #aaa;
+            padding-top: 15px;
+        }
+        /* 赤い印鑑 */
+        .hanko {
+            width: 55px;
+            height: 55px;
+            border: 2px solid #dc2626;
+            border-radius: 50%;
+            color: #dc2626;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            font-weight: bold;
+            transform: rotate(-10deg);
+            box-shadow: 0 0 2px rgba(220, 38, 38, 0.5);
+            background: rgba(255, 235, 235, 0.2);
+            font-family: 'Yuji Syuku', serif;
+        }
+
         .history-box { margin-top: 1.5rem; padding: 1rem; background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 4px; }
         .history-title { font-weight: bold; color: #166534; margin-bottom: 0.5rem; }
         .history-item { font-size: 0.85rem; color: #444; padding: 4px 0; border-bottom: 1px dashed #cbd5e1; }
-        .history-item:last-child { border-bottom: none; }
-        .history-item.back { color: #dc2626; font-weight: bold; }
-
         .timeline { margin-top: 1.5rem; border-left: 2px solid #ccc; padding-left: 15px; }
         .timeline-item { margin-bottom: 10px; color: #888; }
         .timeline-item.done { color: #111; font-weight: bold; }
@@ -38,7 +94,7 @@
 <body>
 
     <header>
-        <div class="logo">安全送達</div>
+        <div class="logo">大和運輸</div>
         <nav>
             <button id="nav-top" class="active" onclick="showTab('top')">トップ</button>
             <button id="nav-service" onclick="showTab('service')">サービス案内</button>
@@ -51,8 +107,7 @@
         <div id="tab-top" class="tab-content active">
             <h2>お荷物追跡</h2>
             <p style="margin-bottom: 1rem; font-size: 0.9rem; color: #555;">
-                安全製品出荷様からの受託のみ受理しております。その他会社の製品は担当しておりません。<br>
-                配達予定日より早く届く場合があります。ご了承ください。
+                大和運輸公式配送追跡システムです。
             </p>
 
             <div class="search-box">
@@ -65,14 +120,50 @@
                     <div><strong>追跡番号：</strong> <span id="resCode"></span></div>
                     <div><strong>現在の状況：</strong> <span id="resStatus" class="status-badge"></span></div>
                     <div><strong>配達予定日：</strong> <span id="resDate"></span></div>
+                    
+                    <!-- 再配達受付メッセージを表示する領域 -->
+                    <div id="redeliveryNotice" class="message-box" style="display: none; background: #fef3c7; border-color: #d97706;">
+                        <strong>【再配達受付】</strong> 追跡のところに再配達の依頼をしました。反映までお待ちください。<br>
+                        <strong>次回配達予定日：</strong> <span id="reDeliveryDateText"></span>
+                    </div>
+
                     <div id="driverMsgBox" class="message-box" style="display: none;">
                         <strong>配達員からのメッセージ：</strong> <span id="resMsg"></span>
                     </div>
                 </div>
 
-                <!-- 履歴エリア -->
+                <!-- C欄に「不在」が含まれる場合に表示されるPDF風不在票 -->
+                <div id="pdfArea" class="pdf-container" style="display: none;">
+                    <div class="pdf-header">ご不在連絡票（電子版PDF）</div>
+                    <div class="pdf-body">
+                        お客様のお荷物（<span id="pdfTrackingCode" class="handwritten"></span>）は<br>
+                        不在のため持ち戻りとさせていただきました。
+                        
+                        <div class="reason-box">
+                            <strong>【持ち戻り理由】</strong><br>
+                            （ 〇 ） ご不在<br>
+                            （　） ご住所不明<br>
+                            （　） 受取辞退
+                        </div>
+
+                        <div class="stamp-area">
+                            <div>
+                                受託業者：通販サイト<br>
+                                配達業者：大和運輸
+                            </div>
+                            <div style="text-align: center;">
+                                <div style="font-size: 0.8rem; margin-bottom: 3px;">配達員確認印</div>
+                                <div class="hanko">カン</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 再配達依頼ボタン -->
+                    <button id="redeliveryBtn" class="btn btn-red" onclick="requestRedelivery()">再配達を依頼する</button>
+                </div>
+
                 <div class="history-box">
-                    <div class="history-title">⏱️ リアルタイム変更履歴（バック対応）</div>
+                    <div class="history-title">⏱️ リアルタイム変更履歴</div>
                     <div id="historyLogs">ログ確認中...</div>
                 </div>
 
@@ -88,14 +179,8 @@
         <div id="tab-service" class="tab-content">
             <h2>サービス案内</h2>
             <div style="margin-top: 1rem;">
-                <h3>■ 中国ー日本 直行スピードルート配送</h3>
-                <p>中国の現地倉庫から日本国内の配達先まで、中間コストやロスタイムを極限まで削ぎ落とした最短・安全ルートでお届けします。</p>
-                <br>
-                <h3>■ 徹底された安全・品質管理体制</h3>
-                <p>「安全製品出荷」様の製品に特化し、壊れやすい荷物や精密品も独自の厳重な輸送基準で一貫してお取り扱いしております。</p>
-                <br>
-                <h3>■ 配達員ダイレクト連携システム</h3>
-                <p>現場の配達員からお客様へ、リアルタイムな配送状況や注意事項をメッセージ（C欄）でお知らせする直接連絡システムを導入しています。</p>
+                <h3>■ 大和運輸スピードルート配送</h3>
+                <p>安全・確実にお客様のお手元までお届けいたします。</p>
             </div>
         </div>
 
@@ -103,19 +188,13 @@
         <div id="tab-company" class="tab-content">
             <h2>会社概要</h2>
             <div style="margin-top: 1rem;">
-                <p>この配達業者は、中国ー日本国内地域までの配達業者です。</p>
-                <p>安全产品出荷　からの受託を配達しております。</p>
-                <p>連絡は <a href="mailto:ased8331@gmail.com">ased8331@gmail.com</a> にお願いします。</p>
-                <br>
-                <p style="color: #666; font-size: 0.9rem;">
-                    ※キャンセル申請をした場合でも国内に到着済みの場合、送料をいただく場合があります。ご了承ください。
-                </p>
+                <p>配達業者：大和運輸</p>
+                <p>連絡先：<a href="mailto:ased8331@gmail.com">ased8331@gmail.com</a></p>
             </div>
         </div>
     </div>
 
     <script>
-        // 指定されたスプレッドシートのIDからGoogle Visualisation APIのURLを作成
         const SPREADSHEET_ID = '178-dcD4xd0fUdEORnoC9haQrKmfGiKTaY0OxiOKBRrQ';
         const gvizUrl = `https://docs.google.com/spreadsheets/d/${SPREADSHEET_ID}/gviz/tq?tqx=out:json`;
 
@@ -131,6 +210,7 @@
         let timer = null;
         let lastKnownState = {}; 
         let historyStore = {};    
+        let isRedeliveryRequested = false;
 
         function showTab(tabName) {
             document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
@@ -156,13 +236,18 @@
             }
         }
 
-        // スプレッドシートからJSON形式でリアルタイム直接取得
+        // 再配達用の翌日〜明後日の日付計算
+        function getNextDeliveryDate() {
+            const today = new Date();
+            const d1 = new Date(today); d1.setDate(today.getDate() + 1);
+            const d2 = new Date(today); d2.setDate(today.getDate() + 2);
+            return `${formatDate(d1)} 〜 ${formatDate(d2)}`;
+        }
+
         async function fetchSpreadsheetData() {
             try {
                 const res = await fetch(gvizUrl + "&t=" + new Date().getTime());
                 const text = await res.text();
-                
-                // gvizのレスポンスから純粋なJSON部分を抽出
                 const jsonText = text.substring(text.indexOf('{'), text.lastIndexOf('}') + 1);
                 const dataObj = JSON.parse(jsonText);
                 const rows = dataObj.table.rows;
@@ -172,31 +257,25 @@
                     const c = row.c;
                     if (c && c[0] && c[0].v) {
                         const code = String(c[0].v).trim().toUpperCase();
-                        
-                        // B欄（数値）
                         let bVal = 1;
                         if (c[1] && c[1].v !== null && c[1].v !== "") {
                             const parsed = parseInt(c[1].v, 10);
                             if (!isNaN(parsed)) bVal = parsed;
                         }
-
-                        // C欄（メッセージ）
                         let cVal = "";
                         if (c[2] && c[2].v !== null) {
                             cVal = String(c[2].v);
                         }
-
                         result[code] = { b: bVal, c: cVal };
                     }
                 });
                 return result;
             } catch (err) {
-                console.error("スプレッドシート直接取得エラー:", err);
+                console.error("データ取得エラー:", err);
                 return null;
             }
         }
 
-        // 状態監視＆画面描画
         async function syncAndRender() {
             if (!currentCode) return;
 
@@ -223,30 +302,15 @@
             }
 
             const prevState = lastKnownState[currentCode];
-
-            // 変更（進む／バックする／メッセージ変更）を感知してタイムスタンプ記録
             if (!prevState || prevState.b !== statusNum || prevState.c !== msg) {
                 const nowStr = new Date().toLocaleString('ja-JP');
-                let isBack = false;
                 let logText = `[${nowStr}] Step ${statusNum}: ${statusText}`;
+                if (msg) logText += ` [メッセージ: ${msg}]`;
 
-                if (prevState) {
-                    if (prevState.b > statusNum) {
-                        isBack = true;
-                        logText += ` （※ステータスが差し戻されました: Step ${prevState.b} → Step ${statusNum}）`;
-                    }
-                    if (prevState.c !== msg) {
-                        logText += ` [メッセージ: ${msg || "なし"}]`;
-                    }
-                } else {
-                    logText += ` （確認開始）`;
-                }
-
-                historyStore[currentCode].unshift({ text: logText, isBack: isBack });
+                historyStore[currentCode].unshift({ text: logText });
                 lastKnownState[currentCode] = { b: statusNum, c: msg };
             }
 
-            // UI反映
             document.getElementById('resCode').innerText = currentCode;
             document.getElementById('resStatus').innerText = statusText;
             document.getElementById('resDate').innerText = getDeliveryDate(currentCode);
@@ -259,10 +323,18 @@
                 msgBox.style.display = "none";
             }
 
+            // C欄に「不在」が含まれる場合、PDF風不在票を表示
+            const pdfArea = document.getElementById('pdfArea');
+            if (msg.includes("不在")) {
+                pdfArea.style.display = "block";
+                document.getElementById('pdfTrackingCode').innerText = currentCode;
+            } else {
+                pdfArea.style.display = "none";
+            }
+
             // 履歴描画
-            const historyArea = document.getElementById('historyLogs');
-            historyArea.innerHTML = historyStore[currentCode]
-                .map(item => `<div class="history-item ${item.isBack ? 'back' : ''}">${item.text}</div>`)
+            document.getElementById('historyLogs').innerHTML = historyStore[currentCode]
+                .map(item => `<div class="history-item">${item.text}</div>`)
                 .join('');
 
             // タイムライン描画
@@ -278,17 +350,37 @@
             document.getElementById('timelineArea').innerHTML = html;
         }
 
+        // 再配達依頼の処理
+        function requestRedelivery() {
+            isRedeliveryRequested = true;
+            document.getElementById('redeliveryNotice').style.display = "block";
+            document.getElementById('reDeliveryDateText').innerText = getNextDeliveryDate();
+            document.getElementById('redeliveryBtn').innerText = "再配達依頼済み";
+            document.getElementById('redeliveryBtn').disabled = true;
+            document.getElementById('redeliveryBtn').style.background = "#6b7280";
+
+            // 履歴ログにも追加
+            const nowStr = new Date().toLocaleString('ja-JP');
+            historyStore[currentCode].unshift({ text: `[${nowStr}] お客様より再配達の依頼を受付しました。` });
+            document.getElementById('historyLogs').innerHTML = historyStore[currentCode]
+                .map(item => `<div class="history-item">${item.text}</div>`)
+                .join('');
+        }
+
         function startTracking() {
             const input = document.getElementById('trackingCode').value.trim().toUpperCase();
             if (!input) return;
 
             currentCode = input;
+            isRedeliveryRequested = false;
+            document.getElementById('redeliveryNotice').style.display = "none";
+            
             syncAndRender();
 
             if (timer) clearInterval(timer);
-            // 1秒ごとにスプレッドシートを監視
             timer = setInterval(syncAndRender, 1000); 
         }
     </script>
 </body>
 </html>
+
