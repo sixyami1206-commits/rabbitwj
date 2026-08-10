@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>大和運輸 - 公式荷物追跡・発送システム</title>
+    <title>大和運輸 - 公式総合サービス</title>
     <link href="https://fonts.googleapis.com/css2?family=Yuji+Syuku&family=Noto+Sans+JP:wght@400;500;700&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -48,8 +48,7 @@
 
         .form-group { margin-bottom: 1.25rem; }
         .form-group label { display: block; font-weight: 600; font-size: 0.9rem; margin-bottom: 6px; }
-        input[type="text"], select { width: 100%; padding: 11px; font-size: 0.95rem; border: 1px solid var(--border); border-radius: 6px; background: #fff; transition: border 0.2s; }
-        input[type="text"]:focus, select:focus { outline: none; border-color: var(--primary); }
+        input[type="text"], select { width: 100%; padding: 11px; font-size: 0.95rem; border: 1px solid var(--border); border-radius: 6px; background: #fff; }
 
         .tag-group { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 6px; }
         .tag-label { display: flex; align-items: center; gap: 6px; background: #f1f5f9; padding: 6px 12px; border-radius: 20px; font-size: 0.85rem; cursor: pointer; border: 1px solid var(--border); }
@@ -64,14 +63,9 @@
         .status-badge { display: inline-block; background: #059669; color: white; padding: 4px 10px; border-radius: 20px; font-size: 0.85rem; font-weight: 700; }
         .message-box { margin-top: 12px; padding: 12px; background: #eff6ff; border-left: 4px solid #2563eb; font-size: 0.9rem; border-radius: 0 4px 4px 0; }
 
-        .slip-container {
-            margin-top: 2rem; background: #fff; border: 2px solid var(--primary); border-radius: 8px; padding: 20px;
-            box-shadow: 0 10px 15px -3px rgba(0,0,0,0.05); position: relative;
-        }
-        .slip-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 2px dashed var(--border); padding-bottom: 12px; margin-bottom: 15px; }
-        .slip-title { font-size: 1.1rem; font-weight: 700; color: var(--primary); }
+        .slip-container { margin-top: 2rem; background: #fff; border: 2px solid var(--primary); border-radius: 8px; padding: 20px; }
         .qr-box { text-align: center; background: #fafafa; padding: 15px; border: 1px solid var(--border); border-radius: 6px; margin-bottom: 15px; }
-        .qr-box img { width: 160px; height: 160px; }
+        .qr-box img { width: 180px; height: 180px; }
 
         .pdf-container { margin-top: 1.5rem; background: #fff; border: 2px solid #333; box-shadow: 0 4px 10px rgba(0,0,0,0.15); padding: 20px; font-family: 'Yuji Syuku', serif; position: relative; }
         .pdf-header { text-align: center; border-bottom: 2px solid #333; padding-bottom: 10px; margin-bottom: 15px; font-size: 1.3rem; font-weight: bold; }
@@ -85,10 +79,7 @@
         .history-title { font-weight: 700; color: #166534; font-size: 0.88rem; margin-bottom: 0.5rem; }
         .history-item { font-size: 0.82rem; color: #334155; padding: 4px 0; border-bottom: 1px dashed #cbd5e1; }
 
-        /* 発送履歴カード用スタイル */
         .ship-history-item { background: #f8fafc; border: 1px solid var(--border); padding: 12px; border-radius: 6px; margin-bottom: 10px; font-size: 0.88rem; }
-        .ship-history-item strong { color: var(--primary); }
-
         .timeline { margin-top: 1.5rem; border-left: 2px solid #cbd5e1; padding-left: 15px; }
         .timeline-item { margin-bottom: 10px; color: #94a3b8; font-size: 0.88rem; }
         .timeline-item.done { color: #1e293b; font-weight: 500; }
@@ -216,20 +207,21 @@
                     <input type="text" id="shipAddress" placeholder="例: 神奈川県横浜市磯子区..." required>
                 </div>
 
-                <button type="submit" class="btn">発送手続き（伝票・QR発行）</button>
+                <button type="submit" class="btn">発送手続き（保護伝票・QR発行）</button>
             </form>
 
             <!-- 発行完了・伝票・QRコード画面 -->
             <div id="shipResult" style="display: none;">
                 <div class="slip-container">
-                    <div class="slip-header">
-                        <div class="slip-title">大和運輸 デジタル持ち込み発送票</div>
+                    <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 2px dashed var(--border); padding-bottom: 12px; margin-bottom: 15px;">
+                        <div style="font-size: 1.1rem; font-weight: 700; color: var(--primary);">大和運輸 デジタル持ち込み発送票</div>
                         <span style="font-size: 0.8rem; background: #e2e8f0; padding: 3px 8px; border-radius: 4px;">磯子営業所 持込専用</span>
                     </div>
 
                     <div class="qr-box">
                         <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 8px;">営業所窓口でこちらのQRを提示してください</p>
                         <img id="qrImage" src="" alt="発送受付QRコード">
+                        <div style="font-size: 0.75rem; color: #dc2626; margin-top: 4px;">※一般カメラで読み取られても暗号化文字のみが表示されます</div>
                         <div style="font-size: 1.2rem; font-weight: bold; color: var(--primary); margin-top: 5px;" id="generatedCode">----</div>
                     </div>
 
@@ -275,6 +267,7 @@
     <script>
         const SPREADSHEET_ID = '178-dcD4xd0fUdEORnoC9haQrKmfGiKTaY0OxiOKBRrQ';
         const gvizUrl = `https://docs.google.com/spreadsheets/d/${SPREADSHEET_ID}/gviz/tq?tqx=out:json`;
+        const SECRET_KEY = 5;
 
         const statusMaster = {
             1: "注文受理", 2: "お支払い確認済み", 3: "倉庫から搬出", 4: "輸送中",
@@ -289,10 +282,19 @@
         let lastKnownState = {}; 
         let historyStore = {};    
 
-        // 初期化：ローカルストレージから発送履歴を読み込む
         document.addEventListener("DOMContentLoaded", () => {
             renderShipHistory();
         });
+
+        /* シフト暗号化関数 */
+        function encryptData(text) {
+            let base64 = btoa(unescape(encodeURIComponent(text)));
+            let encrypted = "";
+            for (let i = 0; i < base64.length; i++) {
+                encrypted += String.fromCharCode(base64.charCodeAt(i) + SECRET_KEY);
+            }
+            return "YAMATO_SEC::" + encrypted;
+        }
 
         function showTab(tabName) {
             document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
@@ -451,7 +453,6 @@
             timer = setInterval(syncAndRender, 1000); 
         }
 
-        /* 発送履歴の描画（LocalStorageから復元） */
         function renderShipHistory() {
             const container = document.getElementById('shipHistoryContainer');
             const history = JSON.parse(localStorage.getItem('yamato_ship_history') || '[]');
@@ -471,7 +472,6 @@
             `).join('');
         }
 
-        /* 発送フォーム＆伝票QR発行ロジック */
         async function handleShipSubmit(e) {
             e.preventDefault();
             const size = document.getElementById('shipSize').value;
@@ -486,25 +486,20 @@
             let price = 0;
             let deliveryDate = new Date(today);
 
-            // 配送地域判定（神奈川県を県内便として扱い同一料金設定）
             const isIsogoZone = address.includes("磯子区") || address.includes("磯子");
             const isKanagawaPref = address.includes("神奈川") || address.includes("横浜");
 
             if (isIsogoZone) {
-                // 磯子区内：最低価格帯 & 最短翌日
                 price = (size === 'doc') ? 50 : (size === 'post') ? 100 : 300;
                 deliveryDate.setDate(today.getDate() + 1);
             } else if (isKanagawaPref) {
-                // 神奈川県内（横浜含む）：中間価格帯 & 最短翌々日
                 price = (size === 'doc') ? 150 : (size === 'post') ? 250 : 600;
                 deliveryDate.setDate(today.getDate() + 2);
             } else {
-                // 県外：最高価格帯 & 最短4日後
                 price = (size === 'doc') ? 300 : (size === 'post') ? 400 : 900;
                 deliveryDate.setDate(today.getDate() + 4);
             }
 
-            // 未利用コード割り当て
             const rows = await fetchSpreadsheetData();
             let allocatedCode = null;
 
@@ -529,13 +524,12 @@
             const tagsText = selectedTags.length > 0 ? selectedTags.join(", ") : "指定なし";
             const deliveryDateText = `${formatDate(deliveryDate)} (${isIsogoZone ? '区内翌日便' : isKanagawaPref ? '県内便' : '県外便'})`;
 
-            // 【機能追加】QRコードの全埋め込みデータ文字列
-            const fullQrText = `【大和運輸 持込票】\n追跡番号: ${allocatedCode}\n品名: ${itemName}\n取扱注意: ${tagsText}\n〒: ${zip}\n住所: ${address}\n送料: ${price}円\n予定日: ${deliveryDateText}`;
-            
-            // 全文データを含めたQRコードURL生成
-            const qrApiUrl = `https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=${encodeURIComponent(fullQrText)}`;
+            // 暗号化データの作成
+            const rawDetails = `[大和運輸 配送伝票]\n追跡番号: ${allocatedCode}\n品名: ${itemName}\n取扱注意: ${tagsText}\n〒: ${zip}\n住所: ${address}\n送料: ${price}円\n予定日: ${deliveryDateText}`;
+            const encryptedStr = encryptData(rawDetails);
 
-            // 画面反映
+            const qrApiUrl = `https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=${encodeURIComponent(encryptedStr)}`;
+
             document.getElementById('generatedCode').innerText = allocatedCode;
             document.getElementById('qrImage').src = qrApiUrl;
             document.getElementById('resItemName').innerText = itemName;
@@ -546,7 +540,6 @@
             
             document.getElementById('shipResult').style.display = "block";
 
-            // 【機能追加】LocalStorage（ローカルストレージ）への発送履歴保存
             const newHistoryItem = {
                 code: allocatedCode,
                 itemName: itemName,
@@ -561,9 +554,7 @@
             historyList.unshift(newHistoryItem);
             localStorage.setItem('yamato_ship_history', JSON.stringify(historyList));
 
-            // 発送履歴表示の復元更新
             renderShipHistory();
-
             document.getElementById('shipResult').scrollIntoView({ behavior: 'smooth' });
         }
     </script>
