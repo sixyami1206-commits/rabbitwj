@@ -9,25 +9,35 @@
         :root { --primary: #002147; --primary-light: #1a3a60; --accent: #f59e0b; --bg: #f8fafc; --card-bg: #ffffff; --text: #1e293b; --text-muted: #64748b; --border: #e2e8f0; }
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Noto Sans JP', sans-serif; }
         body { background-color: var(--bg); color: var(--text); line-height: 1.6; }
-        header { background-color: var(--primary); color: white; padding: 1rem 2rem; display: flex; justify-content: space-between; align-items: center; }
-        .logo { font-size: 1.4rem; font-weight: 700; color: #fff; }
+        header { background-color: var(--primary); color: white; padding: 1rem 2rem; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); }
+        .logo { font-size: 1.4rem; font-weight: 700; letter-spacing: 1px; color: #fff; display: flex; align-items: center; gap: 8px; }
         .logo-badge { background: var(--accent); color: var(--primary); font-size: 0.75rem; padding: 2px 6px; border-radius: 4px; }
         nav { display: flex; gap: 8px; }
-        nav button { background: none; border: none; color: #94a3b8; font-size: 0.95rem; font-weight: 500; cursor: pointer; padding: 8px 16px; border-radius: 6px; }
+        nav button { background: none; border: none; color: #94a3b8; font-size: 0.95rem; font-weight: 500; cursor: pointer; padding: 8px 16px; border-radius: 6px; transition: all 0.2s; }
         nav button.active, nav button:hover { color: white; background: var(--primary-light); }
         .container { max-width: 850px; margin: 2rem auto; padding: 0 1rem; }
-        .tab-content { display: none; background: var(--card-bg); padding: 2.5rem; border-radius: 12px; border: 1px solid var(--border); }
+        .tab-content { display: none; background: var(--card-bg); padding: 2.5rem; border-radius: 12px; border: 1px solid var(--border); box-shadow: 0 4px 12px rgba(0,0,0,0.03); }
         .tab-content.active { display: block; }
         h2 { font-size: 1.35rem; color: var(--primary); margin-bottom: 0.5rem; border-bottom: 2px solid var(--border); padding-bottom: 0.5rem; }
+        .sub-text { font-size: 0.88rem; color: var(--text-muted); margin-bottom: 1.5rem; }
         .form-group { margin-bottom: 1.25rem; }
         .form-group label { display: block; font-weight: 600; font-size: 0.9rem; margin-bottom: 6px; }
-        input[type="text"], select { width: 100%; padding: 11px; font-size: 0.95rem; border: 1px solid var(--border); border-radius: 6px; }
-        button.btn { background: var(--primary); color: white; border: none; padding: 12px 20px; font-size: 0.95rem; font-weight: 600; border-radius: 6px; cursor: pointer; width: 100%; }
+        input[type="text"], select { width: 100%; padding: 11px; font-size: 0.95rem; border: 1px solid var(--border); border-radius: 6px; background: #fff; }
+        .tag-group { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 6px; }
+        .tag-label { display: flex; align-items: center; gap: 6px; background: #f1f5f9; padding: 6px 12px; border-radius: 20px; font-size: 0.85rem; cursor: pointer; border: 1px solid var(--border); }
+        .tag-label input { accent-color: var(--primary); }
+        button.btn { background: var(--primary); color: white; border: none; padding: 12px 20px; font-size: 0.95rem; font-weight: 600; border-radius: 6px; cursor: pointer; width: 100%; transition: background 0.2s; }
+        button.btn:hover { background: var(--primary-light); }
         .btn-red { background: #dc2626; margin-top: 15px; }
         .btn-gray { background: #64748b; margin-top: 10px; }
         .result-card { margin-top: 1.5rem; padding: 1.25rem; border: 1px solid var(--border); border-radius: 8px; background: #f8fafc; }
         .status-badge { display: inline-block; background: #059669; color: white; padding: 4px 10px; border-radius: 20px; font-size: 0.85rem; font-weight: 700; }
         .message-box { margin-top: 12px; padding: 12px; background: #eff6ff; border-left: 4px solid #2563eb; font-size: 0.9rem; border-radius: 0 4px 4px 0; }
+        .error-card { background: #fef2f2; border: 1px solid #fca5a5; color: #991b1b; padding: 1rem; border-radius: 8px; margin-top: 1.5rem; font-size: 0.95rem; line-height: 1.7; font-weight: 500; }
+        .slip-container { margin-top: 2rem; background: #fff; border: 2px solid var(--primary); border-radius: 8px; padding: 20px; }
+        .qr-box { text-align: center; background: #fafafa; padding: 15px; border: 1px solid var(--border); border-radius: 6px; margin-bottom: 15px; }
+        .qr-box img { width: 180px; height: 180px; }
+        .ship-history-item { background: #f8fafc; border: 1px solid var(--border); padding: 12px; border-radius: 6px; margin-bottom: 10px; font-size: 0.88rem; }
         .pdf-container { margin-top: 1.5rem; background: #fff; border: 2px solid #333; box-shadow: 0 4px 10px rgba(0,0,0,0.15); padding: 20px; font-family: 'Yuji Syuku', serif; }
         .pdf-header { text-align: center; border-bottom: 2px solid #333; padding-bottom: 10px; margin-bottom: 15px; font-size: 1.3rem; font-weight: bold; }
         .pdf-body { font-size: 1rem; line-height: 1.8; }
@@ -38,8 +48,9 @@
         .timeline-item { margin-bottom: 10px; color: #94a3b8; font-size: 0.88rem; }
         .timeline-item.done { color: #1e293b; font-weight: 500; }
         .timeline-item.current { color: #2563eb; font-weight: 700; }
-        .qr-box { text-align: center; background: #fafafa; padding: 15px; border: 1px solid var(--border); border-radius: 6px; margin-bottom: 15px; }
-        .qr-box img { width: 180px; height: 180px; }
+        .info-table { width: 100%; border-collapse: collapse; margin-top: 1rem; }
+        .info-table th, .info-table td { border: 1px solid var(--border); padding: 10px 12px; font-size: 0.9rem; }
+        .info-table th { background: #f1f5f9; width: 30%; text-align: left; color: var(--primary); }
     </style>
 </head>
 <body>
@@ -47,8 +58,9 @@
     <header>
         <div class="logo">大和運輸 <span class="logo-badge">公式</span></div>
         <nav>
-            <button id="nav-top" class="active" onclick="showTab('top')">追跡</button>
+            <button id="nav-top" class="active" onclick="showTab('top')">お荷物追跡</button>
             <button id="nav-ship" onclick="showTab('ship')">荷物を送る</button>
+            <button id="nav-company" onclick="showTab('company')">営業所・会社概要</button>
         </nav>
     </header>
 
@@ -56,8 +68,10 @@
         <!-- 追跡タブ -->
         <div id="tab-top" class="tab-content active">
             <h2>お荷物追跡</h2>
+            <p class="sub-text">お問い合わせ伝票番号を入力して配送状況をご確認いただけます。</p>
+
             <div style="display:flex; gap:10px; margin-bottom: 1.5rem;">
-                <input type="text" id="trackingCode" placeholder="追跡番号（例: AM123456）">
+                <input type="text" id="trackingCode" placeholder="追跡番号を入力（例: AM123456）">
                 <button class="btn" style="width:120px;" onclick="startTracking()">追跡する</button>
             </div>
 
@@ -71,11 +85,9 @@
                         <strong>お知らせ：</strong> <span id="resMsg"></span>
                     </div>
 
-                    <!-- 確認ボタン（配達完了時） -->
                     <button id="confirmDeliveredBtn" class="btn btn-gray" style="display:none;" onclick="confirmDelivered()">配達確認（履歴から削除）</button>
                 </div>
 
-                <!-- 各種通知・PDFエリア -->
                 <div id="pdfArea" class="pdf-container" style="display: none;">
                     <div class="pdf-header" id="pdfTitle">ご不在連絡票（電子版PDF）</div>
                     <div class="pdf-body" id="pdfBodyContent"></div>
@@ -89,28 +101,122 @@
             </div>
         </div>
 
-        <!-- 発送申し込みタブ -->
+        <!-- 荷物を送るタブ -->
         <div id="tab-ship" class="tab-content">
             <h2>荷物の発送申し込み</h2>
-            <form onsubmit="handleShipSubmit(event)">
+            <p class="sub-text">受付窓口：<strong>磯子営業所持ち込み限定</strong>（営業時間: 8:00〜22:00 / 持ち込み締め切り: 22:00）</p>
+
+            <form id="shippingForm" onsubmit="handleShipSubmit(event)">
                 <div class="form-group">
-                    <label>品名</label>
-                    <input type="text" id="shipItemName" placeholder="例: 書類、服など" required>
+                    <label>荷物サイズ</label>
+                    <select id="shipSize" required>
+                        <option value="doc">簡易書類（50円〜300円）</option>
+                        <option value="post">ポストサイズ（100円〜400円）</option>
+                        <option value="parcel">宅急便サイズ（300円〜900円）</option>
+                    </select>
                 </div>
+
+                <div class="form-group">
+                    <label>品名（具体的な内容物）</label>
+                    <input type="text" id="shipItemName" placeholder="例: 書類、服、小型電子機器など" required>
+                </div>
+
+                <div class="form-group">
+                    <label>取扱注意オプション</label>
+                    <div class="tag-group">
+                        <label class="tag-label"><input type="checkbox" value="ワレモノ注意"> ⚠️ 割れ物注意</label>
+                        <label class="tag-label"><input type="checkbox" value="精密機器"> 💻 精密機器</label>
+                        <label class="tag-label"><input type="checkbox" value="下積み厳禁"> 📦 下積み厳禁</label>
+                        <label class="tag-label"><input type="checkbox" value="なまもの"> 🍎 なまもの</label>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>お届け先 郵便番号</label>
+                    <input type="text" id="shipZip" placeholder="例: 235-0011" required>
+                </div>
+
                 <div class="form-group">
                     <label>お届け先 住所</label>
-                    <input type="text" id="shipAddress" placeholder="例: 神奈川県横浜市..." required>
+                    <input type="text" id="shipAddress" placeholder="例: 神奈川県横浜市磯子区..." required>
                 </div>
-                <button type="submit" class="btn">発送手続き（保護QR発行）</button>
+
+                <button type="submit" class="btn">発送手続き（保護伝票・QR発行）</button>
             </form>
 
-            <div id="shipResult" style="display: none; margin-top:2rem;">
-                <h3>持込受付用QRコード</h3>
-                <div class="qr-box">
-                    <img id="qrImage" src="" alt="発送受付QR">
-                </div>
-                <p>■ 割り当て追跡コード: <strong id="resGeneratedCode"></strong></p>
+            <!-- コード枯渇エラー画面 -->
+            <div id="shipBusyError" class="error-card" style="display: none;">
+                現在大和運輸発送サイトの混雑によりコードの取得ができません。<br>
+                営業所に直接お越しいただくか、コード発送までいましばらくお待ちください。
             </div>
+
+            <!-- 発行完了・伝票・QRコード画面 -->
+            <div id="shipResult" style="display: none;">
+                <div class="slip-container">
+                    <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 2px dashed var(--border); padding-bottom: 12px; margin-bottom: 15px;">
+                        <div style="font-size: 1.1rem; font-weight: 700; color: var(--primary);">大和運輸 デジタル持ち込み発送票</div>
+                        <span style="font-size: 0.8rem; background: #e2e8f0; padding: 3px 8px; border-radius: 4px;">磯子営業所 持込専用</span>
+                    </div>
+
+                    <div class="qr-box">
+                        <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 8px;">営業所窓口でこちらのQRを提示してください</p>
+                        <img id="qrImage" src="" alt="発送受付QRコード">
+                        <div style="font-size: 0.75rem; color: #dc2626; margin-top: 4px;">※一般カメラで読み取られても暗号化文字のみが表示されます</div>
+                        <div style="font-size: 1.2rem; font-weight: bold; color: var(--primary); margin-top: 5px;" id="generatedCode">----</div>
+                    </div>
+
+                    <div style="font-size: 0.9rem; line-height: 1.8; background: #f8fafc; padding: 12px; border-radius: 6px;">
+                        <div>■ <strong>品名：</strong> <span id="resItemName">-</span></div>
+                        <div>■ <strong>取扱注意：</strong> <span id="resTags">-</span></div>
+                        <div>■ <strong>お届け先：</strong> <span id="resAddress">-</span></div>
+                        <div>■ <strong>適用送料（税込）：</strong> <span id="calcPrice" style="color: #dc2626; font-weight: bold;">0円</span></div>
+                        <div>■ <strong>最短お届け予定日：</strong> <strong id="calcDeliveryDate">-</strong></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ローカルストレージ発送履歴表示枠 -->
+            <div style="margin-top: 2rem;">
+                <h3 style="font-size: 1.1rem; color: var(--primary); margin-bottom: 0.5rem;">📜 過去の発送申し込み履歴</h3>
+                <div id="shipHistoryContainer">履歴はありません。</div>
+            </div>
+        </div>
+
+        <!-- 営業所・会社概要タブ -->
+        <div id="tab-company" class="tab-content">
+            <h2>営業所・会社概要</h2>
+            <p class="sub-text">大和運輸の拠点情報および特定商取引法に基づく会社情報です。</p>
+
+            <table class="info-table">
+                <tr>
+                    <th>会社名・屋号</th>
+                    <td>大和運輸 株式会社 (Yamato Express Co., Ltd.)</td>
+                </tr>
+                <tr>
+                    <th>管轄営業所</th>
+                    <td>磯子営業所（持ち込み専用受付窓口）</td>
+                </tr>
+                <tr>
+                    <th>所在地</th>
+                    <td>〒235-0011 神奈川県横浜市磯子区馬場町</td>
+                </tr>
+                <tr>
+                    <th>営業時間</th>
+                    <td>8:00 〜 22:00（当日発送締め切り 22:00）</td>
+                </tr>
+                <tr>
+                    <th>事業内容</th>
+                    <td>一般貨物自動車運送事業、宅配便発送受託業務、荷物追跡システム運用</td>
+                </tr>
+                <tr>
+                    <th>代表問い合わせ</th>
+                    <td><a href="mailto:ased8331@gmail.com" style="color: var(--primary);">ased8331@gmail.com</a></td>
+                </tr>
+                <tr>
+                    <th>個人情報保護</th>
+                    <td>発送情報およびQRコードデータは特定暗号アルゴリズムにより個人情報を保護しております。</td>
+                </tr>
+            </table>
         </div>
     </div>
 
@@ -119,7 +225,6 @@
         const gvizUrl = `https://docs.google.com/spreadsheets/d/${SPREADSHEET_ID}/gviz/tq?tqx=out:json`;
         const SECRET_KEY = 5;
 
-        // 1〜5のステータスマスター
         const statusMaster = {
             1: "営業所保管中",
             2: "輸送中",
@@ -130,6 +235,10 @@
 
         let currentCode = null;
         let timer = null;
+
+        document.addEventListener("DOMContentLoaded", () => {
+            renderShipHistory();
+        });
 
         function showTab(tabName) {
             document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
@@ -142,12 +251,10 @@
             return `${d.getFullYear()}年${d.getMonth() + 1}月${d.getDate()}日`;
         }
 
-        /* 予定日の動的計算 */
         function calcDeliveryDate(statusNum) {
             const now = new Date();
             if (statusNum === 5) return "配達完了";
 
-            // ステータス3（配達店到着）の場合：13時前なら当日、13時以降なら翌日
             if (statusNum === 3) {
                 if (now.getHours() < 13) {
                     return `${formatDate(now)} (本日お届け予定)`;
@@ -157,7 +264,6 @@
                 }
             }
 
-            // その他（1〜2日後）
             const d1 = new Date(now); d1.setDate(now.getDate() + 1);
             const d2 = new Date(now); d2.setDate(now.getDate() + 3);
             return `${formatDate(d1)} 〜 ${formatDate(d2)}`;
@@ -177,7 +283,6 @@
         async function syncAndRender() {
             if (!currentCode) return;
 
-            // ローカル削除チェック（2日経過または確認済み）
             const history = JSON.parse(localStorage.getItem('tracking_history') || '{}');
             if (history[currentCode] && history[currentCode].deleted) {
                 document.getElementById('trackingResult').style.display = "none";
@@ -214,7 +319,7 @@
             document.getElementById('trackingError').style.display = "none";
             document.getElementById('trackingResult').style.display = "block";
 
-            const statusNum = Math.min(Math.max(foundItem.b, 1), 5); // 1~5の範囲に固定
+            const statusNum = Math.min(Math.max(foundItem.b, 1), 5);
             const statusText = statusMaster[statusNum];
             const msg = foundItem.c;
 
@@ -222,7 +327,6 @@
             document.getElementById('resStatus').innerText = statusText;
             document.getElementById('resDate').innerText = calcDeliveryDate(statusNum);
 
-            // 5（配達済み）の自動削除タイマー処理（48時間経過で削除）
             if (statusNum === 5) {
                 document.getElementById('confirmDeliveredBtn').style.display = "block";
                 if (!history[currentCode]) {
@@ -239,7 +343,6 @@
                 document.getElementById('confirmDeliveredBtn').style.display = "none";
             }
 
-            // メッセージ & PDF条件判定
             const msgBox = document.getElementById('driverMsgBox');
             const pdfArea = document.getElementById('pdfArea');
             const pdfTitle = document.getElementById('pdfTitle');
@@ -263,7 +366,7 @@
                 pdfTitle.innerText = "発送保留通知";
                 pdfContent.innerHTML = `
                     お荷物（<b>${currentCode}</b>）は宛先不備のため営業所にて保管中です。
-                    <button class="btn btn-red" onclick="requestReturn()">返送手続きを実行する</button>`;
+                    <button class="btn btn-red" onclick="alert('返送リクエストを受け付けました。')">返送手続きを実行する</button>`;
             } else if (msg.includes("不在") || msg.includes("ご不在")) {
                 msgBox.style.display = "none";
                 pdfArea.style.display = "block";
@@ -283,17 +386,12 @@
                 pdfArea.style.display = "none";
             }
 
-            // タイムライン描画 (1〜5)
             let html = "";
             for (let i = 1; i <= 5; i++) {
                 let cls = (i < statusNum) ? "timeline-item done" : (i === statusNum) ? "timeline-item current" : "timeline-item";
                 html += `<div class="${cls}">Step ${i}: ${statusMaster[i]}</div>`;
             }
             document.getElementById('timelineArea').innerHTML = html;
-        }
-
-        function requestReturn() {
-            alert("返送リクエストを受け付けました。差出人様へのお手配を開始します。");
         }
 
         function confirmDelivered() {
@@ -313,11 +411,37 @@
             timer = setInterval(syncAndRender, 2000);
         }
 
-        /* 暗号化機能付き発送申込 (AMから始まりB・C欄が空のコードを取得) */
+        function renderShipHistory() {
+            const container = document.getElementById('shipHistoryContainer');
+            const history = JSON.parse(localStorage.getItem('yamato_ship_history') || '[]');
+
+            if (history.length === 0) {
+                container.innerHTML = "<p style='font-size: 0.85rem; color: #888;'>発送履歴はありません。</p>";
+                return;
+            }
+
+            container.innerHTML = history.map(item => `
+                <div class="ship-history-item">
+                    <div><strong>追跡コード：</strong> ${item.code} （申込日時: ${item.date}）</div>
+                    <div><strong>品名：</strong> ${item.itemName} / <strong>取扱注意：</strong> ${item.tags}</div>
+                    <div><strong>お届け先：</strong> ${item.address}</div>
+                    <div><strong>送料：</strong> ${item.price} / <strong>最短予定日：</strong> ${item.deliveryDate}</div>
+                </div>
+            `).join('');
+        }
+
         async function handleShipSubmit(e) {
             e.preventDefault();
+            document.getElementById('shipBusyError').style.display = "none";
+            document.getElementById('shipResult').style.display = "none";
+
+            const size = document.getElementById('shipSize').value;
             const itemName = document.getElementById('shipItemName').value.trim();
+            const zip = document.getElementById('shipZip').value.trim();
             const address = document.getElementById('shipAddress').value.trim();
+
+            const selectedTags = [];
+            document.querySelectorAll('.tag-group input:checked').forEach(cb => selectedTags.push(cb.value));
 
             const rows = await fetchSpreadsheetData();
             let allocatedCode = null;
@@ -327,7 +451,6 @@
                     const c = row.c;
                     if (c && c[0] && c[0].v) {
                         const codeStr = String(c[0].v).trim().toUpperCase();
-                        // AMから始まり、B欄・C欄が空白のものを取得
                         if (codeStr.startsWith("AM")) {
                             const hasB = c[1] && c[1].v !== null && c[1].v !== "";
                             const hasC = c[2] && c[2].v !== null && c[2].v !== "";
@@ -340,13 +463,35 @@
                 }
             }
 
+            // 割り当てできるコードがなかった場合のエラー処理
             if (!allocatedCode) {
-                allocatedCode = "AM" + Math.floor(100000 + Math.random() * 900000);
+                document.getElementById('shipBusyError').style.display = "block";
+                return;
             }
 
-            const rawDetails = `[大和運輸 伝票]\n追跡番号: ${allocatedCode}\n品名: ${itemName}\n住所: ${address}`;
+            const today = new Date();
+            let price = 0;
+            let deliveryDate = new Date(today);
+
+            const isIsogoZone = address.includes("磯子区") || address.includes("磯子");
+            const isKanagawaPref = address.includes("神奈川") || address.includes("横浜");
+
+            if (isIsogoZone) {
+                price = (size === 'doc') ? 50 : (size === 'post') ? 100 : 300;
+                deliveryDate.setDate(today.getDate() + 1);
+            } else if (isKanagawaPref) {
+                price = (size === 'doc') ? 150 : (size === 'post') ? 250 : 600;
+                deliveryDate.setDate(today.getDate() + 2);
+            } else {
+                price = (size === 'doc') ? 300 : (size === 'post') ? 400 : 900;
+                deliveryDate.setDate(today.getDate() + 4);
+            }
+
+            const tagsText = selectedTags.length > 0 ? selectedTags.join(", ") : "指定なし";
+            const deliveryDateText = `${formatDate(deliveryDate)} (${isIsogoZone ? '区内翌日便' : isKanagawaPref ? '県内便' : '県外便'})`;
+
+            const rawDetails = `[大和運輸 配送伝票]\n追跡番号: ${allocatedCode}\n品名: ${itemName}\n取扱注意: ${tagsText}\n〒: ${zip}\n住所: ${address}\n送料: ${price}円`;
             
-            // シフト暗号化
             let base64 = btoa(unescape(encodeURIComponent(rawDetails)));
             let encryptedStr = "YAMATO_SEC::";
             for (let i = 0; i < base64.length; i++) {
@@ -355,9 +500,32 @@
 
             const qrApiUrl = `https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=${encodeURIComponent(encryptedStr)}`;
 
-            document.getElementById('resGeneratedCode').innerText = allocatedCode;
+            document.getElementById('generatedCode').innerText = allocatedCode;
             document.getElementById('qrImage').src = qrApiUrl;
+            document.getElementById('resItemName').innerText = itemName;
+            document.getElementById('resTags').innerText = tagsText;
+            document.getElementById('resAddress').innerText = address;
+            document.getElementById('calcPrice').innerText = `${price}円`;
+            document.getElementById('calcDeliveryDate').innerText = deliveryDateText;
+            
             document.getElementById('shipResult').style.display = "block";
+
+            const newHistoryItem = {
+                code: allocatedCode,
+                itemName: itemName,
+                tags: tagsText,
+                address: address,
+                price: `${price}円`,
+                deliveryDate: deliveryDateText,
+                date: new Date().toLocaleString('ja-JP')
+            };
+
+            const historyList = JSON.parse(localStorage.getItem('yamato_ship_history') || '[]');
+            historyList.unshift(newHistoryItem);
+            localStorage.setItem('yamato_ship_history', JSON.stringify(historyList));
+
+            renderShipHistory();
+            document.getElementById('shipResult').scrollIntoView({ behavior: 'smooth' });
         }
     </script>
 </body>
