@@ -28,6 +28,7 @@
         .tag-label input { accent-color: var(--primary); }
         button.btn { background: var(--primary); color: white; border: none; padding: 12px 20px; font-size: 0.95rem; font-weight: 600; border-radius: 6px; cursor: pointer; width: 100%; transition: background 0.2s; }
         button.btn:hover { background: var(--primary-light); }
+        button.btn:disabled { background: #94a3b8 !important; cursor: not-allowed; }
         .btn-red { background: #dc2626; margin-top: 15px; }
         .btn-gray { background: #64748b; margin-top: 10px; }
         .result-card { margin-top: 1.5rem; padding: 1.25rem; border: 1px solid var(--border); border-radius: 8px; background: #f8fafc; }
@@ -44,6 +45,11 @@
         .reason-box { margin: 12px 0; border: 1px solid #666; padding: 10px; background: #fffdfa; }
         .stamp-area { display: flex; justify-content: space-between; align-items: flex-end; margin-top: 15px; border-top: 1px dashed #aaa; padding-top: 12px; }
         .hanko { width: 55px; height: 55px; border: 2px solid #dc2626; border-radius: 50%; color: #dc2626; display: flex; align-items: center; justify-content: center; font-size: 1.1rem; font-weight: bold; transform: rotate(-10deg); font-family: 'Yuji Syuku', serif; }
+        
+        .history-box { margin-top: 1.5rem; padding: 1rem; background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 6px; }
+        .history-title { font-weight: 700; color: #166534; font-size: 0.88rem; margin-bottom: 0.5rem; }
+        .history-item { font-size: 0.82rem; color: #334155; padding: 4px 0; border-bottom: 1px dashed #cbd5e1; }
+
         .timeline { margin-top: 1.5rem; border-left: 2px solid #cbd5e1; padding-left: 15px; }
         .timeline-item { margin-bottom: 10px; color: #94a3b8; font-size: 0.88rem; }
         .timeline-item.done { color: #1e293b; font-weight: 500; }
@@ -88,11 +94,19 @@
                     <button id="confirmDeliveredBtn" class="btn btn-gray" style="display:none;" onclick="confirmDelivered()">配達確認（履歴から削除）</button>
                 </div>
 
+                <!-- PDFエリア -->
                 <div id="pdfArea" class="pdf-container" style="display: none;">
                     <div class="pdf-header" id="pdfTitle">ご不在連絡票（電子版PDF）</div>
                     <div class="pdf-body" id="pdfBodyContent"></div>
                 </div>
 
+                <!-- リアルタイム変更履歴 -->
+                <div class="history-box">
+                    <div class="history-title">⏱️ リアルタイム更新履歴</div>
+                    <div id="historyLogs">ログ確認中...</div>
+                </div>
+
+                <!-- タイムライン -->
                 <div class="timeline" id="timelineArea"></div>
             </div>
 
@@ -144,13 +158,11 @@
                 <button type="submit" class="btn">発送手続き（保護伝票・QR発行）</button>
             </form>
 
-            <!-- コード枯渇エラー画面 -->
             <div id="shipBusyError" class="error-card" style="display: none;">
                 現在大和運輸発送サイトの混雑によりコードの取得ができません。<br>
                 営業所に直接お越しいただくか、コード発送までいましばらくお待ちください。
             </div>
 
-            <!-- 発行完了・伝票・QRコード画面 -->
             <div id="shipResult" style="display: none;">
                 <div class="slip-container">
                     <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 2px dashed var(--border); padding-bottom: 12px; margin-bottom: 15px;">
@@ -175,17 +187,16 @@
                 </div>
             </div>
 
-            <!-- ローカルストレージ発送履歴表示枠 -->
             <div style="margin-top: 2rem;">
                 <h3 style="font-size: 1.1rem; color: var(--primary); margin-bottom: 0.5rem;">📜 過去の発送申し込み履歴</h3>
                 <div id="shipHistoryContainer">履歴はありません。</div>
             </div>
         </div>
 
-        <!-- 営業所・会社概要タブ -->
+        <!-- 営業所・会社概要タブ (所在地なし) -->
         <div id="tab-company" class="tab-content">
             <h2>営業所・会社概要</h2>
-            <p class="sub-text">大和運輸の拠点情報および特定商取引法に基づく会社情報です。</p>
+            <p class="sub-text">大和運輸の拠点情報および会社情報です。</p>
 
             <table class="info-table">
                 <tr>
@@ -195,10 +206,6 @@
                 <tr>
                     <th>管轄営業所</th>
                     <td>磯子営業所（持ち込み専用受付窓口）</td>
-                </tr>
-                <tr>
-                    <th>所在地</th>
-                    <td>〒235-0011 神奈川県横浜市磯子区馬場町</td>
                 </tr>
                 <tr>
                     <th>営業時間</th>
@@ -212,10 +219,6 @@
                     <th>代表問い合わせ</th>
                     <td><a href="mailto:ased8331@gmail.com" style="color: var(--primary);">ased8331@gmail.com</a></td>
                 </tr>
-                <tr>
-                    <th>個人情報保護</th>
-                    <td>発送情報およびQRコードデータは特定暗号アルゴリズムにより個人情報を保護しております。</td>
-                </tr>
             </table>
         </div>
     </div>
@@ -225,7 +228,17 @@
         const gvizUrl = `https://docs.google.com/spreadsheets/d/${SPREADSHEET_ID}/gviz/tq?tqx=out:json`;
         const SECRET_KEY = 5;
 
-        const statusMaster = {
+        // 国外・一般発送（1〜18）
+        const globalStatusMaster = {
+            1: "注文受理", 2: "お支払い確認済み", 3: "倉庫から搬出", 4: "輸送中",
+            5: "仕分けセンターで仕分け", 6: "仕分けセンターから搬出", 7: "出発空港に到着しました。",
+            8: "輸出通関開始", 9: "輸出通関成功", 10: "フライト待ち", 11: "出国しました。",
+            12: "配送地域に到着", 13: "通関手続き開始", 14: "通関成功", 15: "税関 完了",
+            16: "配達準備", 17: "配達中", 18: "配達済み"
+        };
+
+        // AMコード国内発送（1〜5）
+        const domesticStatusMaster = {
             1: "営業所保管中",
             2: "輸送中",
             3: "配達店到着",
@@ -235,6 +248,8 @@
 
         let currentCode = null;
         let timer = null;
+        let lastKnownState = {};
+        let historyStore = {};
 
         document.addEventListener("DOMContentLoaded", () => {
             renderShipHistory();
@@ -251,22 +266,29 @@
             return `${d.getFullYear()}年${d.getMonth() + 1}月${d.getDate()}日`;
         }
 
-        function calcDeliveryDate(statusNum) {
+        function calcDeliveryDate(code, statusNum) {
+            const isAM = code.startsWith("AM");
+            const maxStep = isAM ? 5 : 18;
+            if (statusNum === maxStep) return "配達完了";
+
             const now = new Date();
-            if (statusNum === 5) return "配達完了";
-
-            if (statusNum === 3) {
-                if (now.getHours() < 13) {
-                    return `${formatDate(now)} (本日お届け予定)`;
-                } else {
-                    const tomorrow = new Date(now); tomorrow.setDate(now.getDate() + 1);
-                    return `${formatDate(tomorrow)} (明日お届け予定)`;
+            if (isAM) {
+                if (statusNum === 3) {
+                    if (now.getHours() < 13) {
+                        return `${formatDate(now)} (本日お届け予定)`;
+                    } else {
+                        const tomorrow = new Date(now); tomorrow.setDate(now.getDate() + 1);
+                        return `${formatDate(tomorrow)} (明日お届け予定)`;
+                    }
                 }
+                const d1 = new Date(now); d1.setDate(now.getDate() + 1);
+                const d2 = new Date(now); d2.setDate(now.getDate() + 3);
+                return `${formatDate(d1)} 〜 ${formatDate(d2)}`;
+            } else {
+                const d1 = new Date(now); d1.setDate(now.getDate() + 7);
+                const d2 = new Date(now); d2.setDate(now.getDate() + 21);
+                return `${formatDate(d1)} 〜 ${formatDate(d2)}`;
             }
-
-            const d1 = new Date(now); d1.setDate(now.getDate() + 1);
-            const d2 = new Date(now); d2.setDate(now.getDate() + 3);
-            return `${formatDate(d1)} 〜 ${formatDate(d2)}`;
         }
 
         async function fetchSpreadsheetData() {
@@ -319,15 +341,36 @@
             document.getElementById('trackingError').style.display = "none";
             document.getElementById('trackingResult').style.display = "block";
 
-            const statusNum = Math.min(Math.max(foundItem.b, 1), 5);
-            const statusText = statusMaster[statusNum];
+            const isAM = currentCode.startsWith("AM");
+            const master = isAM ? domesticStatusMaster : globalStatusMaster;
+            const maxStep = isAM ? 5 : 18;
+
+            const statusNum = Math.min(Math.max(foundItem.b, 1), maxStep);
+            const statusText = master[statusNum] || master[1];
             const msg = foundItem.c;
+
+            // リアルタイムログ更新処理
+            if (!historyStore[currentCode]) historyStore[currentCode] = [];
+            const prevState = lastKnownState[currentCode];
+            if (!prevState || prevState.b !== statusNum || prevState.c !== msg) {
+                const nowStr = new Date().toLocaleString('ja-JP');
+                let logText = `[${nowStr}] Step ${statusNum}: ${statusText}`;
+                if (msg) logText += ` (${msg})`;
+                historyStore[currentCode].unshift({ text: logText });
+                lastKnownState[currentCode] = { b: statusNum, c: msg };
+            }
 
             document.getElementById('resCode').innerText = currentCode;
             document.getElementById('resStatus').innerText = statusText;
-            document.getElementById('resDate').innerText = calcDeliveryDate(statusNum);
+            document.getElementById('resDate').innerText = calcDeliveryDate(currentCode, statusNum);
 
-            if (statusNum === 5) {
+            // 履歴ログ表示
+            document.getElementById('historyLogs').innerHTML = historyStore[currentCode]
+                .map(item => `<div class="history-item">${item.text}</div>`)
+                .join('');
+
+            // 完了時削除タイマー (AM等の配達完了時)
+            if (statusNum === maxStep) {
                 document.getElementById('confirmDeliveredBtn').style.display = "block";
                 if (!history[currentCode]) {
                     history[currentCode] = { deliveredAt: new Date().getTime() };
@@ -343,6 +386,7 @@
                 document.getElementById('confirmDeliveredBtn').style.display = "none";
             }
 
+            // メッセージ & PDF条件判定
             const msgBox = document.getElementById('driverMsgBox');
             const pdfArea = document.getElementById('pdfArea');
             const pdfTitle = document.getElementById('pdfTitle');
@@ -366,7 +410,7 @@
                 pdfTitle.innerText = "発送保留通知";
                 pdfContent.innerHTML = `
                     お荷物（<b>${currentCode}</b>）は宛先不備のため営業所にて保管中です。
-                    <button class="btn btn-red" onclick="alert('返送リクエストを受け付けました。')">返送手続きを実行する</button>`;
+                    <button id="returnBtn" class="btn btn-red" onclick="executeReturnOnce()">返送手続きを実行する</button>`;
             } else if (msg.includes("不在") || msg.includes("ご不在")) {
                 msgBox.style.display = "none";
                 pdfArea.style.display = "block";
@@ -379,19 +423,50 @@
                         （ ） 住所不明<br>
                         （ ） 受取辞退
                     </div>
-                    <button class="btn btn-red" onclick="alert('再配達を承りました。')">再配達を依頼する</button>`;
+                    <button id="redeliveryBtn" class="btn btn-red" onclick="executeRedeliveryOnce()">再配達を依頼する</button>`;
             } else {
                 msgBox.style.display = msg ? "block" : "none";
                 if (msg) msgBox.innerText = msg;
                 pdfArea.style.display = "none";
             }
 
+            // タイムライン描画
             let html = "";
-            for (let i = 1; i <= 5; i++) {
+            for (let i = 1; i <= maxStep; i++) {
                 let cls = (i < statusNum) ? "timeline-item done" : (i === statusNum) ? "timeline-item current" : "timeline-item";
-                html += `<div class="${cls}">Step ${i}: ${statusMaster[i]}</div>`;
+                html += `<div class="${cls}">Step ${i}: ${master[i]}</div>`;
             }
             document.getElementById('timelineArea').innerHTML = html;
+        }
+
+        // 1回だけ実行可能な返送手続き
+        function executeReturnOnce() {
+            const btn = document.getElementById('returnBtn');
+            if (btn) {
+                btn.disabled = true;
+                btn.innerText = "返送依頼済み";
+            }
+            const nowStr = new Date().toLocaleString('ja-JP');
+            historyStore[currentCode].unshift({ text: `[${nowStr}] 差出人様への返送手続きを受け付けました。` });
+            document.getElementById('historyLogs').innerHTML = historyStore[currentCode]
+                .map(item => `<div class="history-item">${item.text}</div>`)
+                .join('');
+            alert("返送リクエストを受け付けました。");
+        }
+
+        // 1回だけ実行可能な再配達依頼
+        function executeRedeliveryOnce() {
+            const btn = document.getElementById('redeliveryBtn');
+            if (btn) {
+                btn.disabled = true;
+                btn.innerText = "再配達依頼済み";
+            }
+            const nowStr = new Date().toLocaleString('ja-JP');
+            historyStore[currentCode].unshift({ text: `[${nowStr}] お客様より再配達の依頼を受付しました。` });
+            document.getElementById('historyLogs').innerHTML = historyStore[currentCode]
+                .map(item => `<div class="history-item">${item.text}</div>`)
+                .join('');
+            alert("再配達を承りました。");
         }
 
         function confirmDelivered() {
@@ -463,7 +538,6 @@
                 }
             }
 
-            // 割り当てできるコードがなかった場合のエラー処理
             if (!allocatedCode) {
                 document.getElementById('shipBusyError').style.display = "block";
                 return;
