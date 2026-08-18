@@ -3,66 +3,162 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>大和運輸 - 公式総合サービス</title>
-    <link href="https://fonts.googleapis.com/css2?family=Yuji+Syuku&family=Noto+Sans+JP:wght@400;500;700&display=swap" rel="stylesheet">
+    <title>荷急運輸 - 公式総合物流サービス</title>
+    <link href="https://fonts.googleapis.com/css2?family=Yuji+Syuku&family=Noto+Sans+JP:wght@400;500;700;900&display=swap" rel="stylesheet">
     <style>
-        :root { --primary: #002147; --primary-light: #1a3a60; --accent: #f59e0b; --bg: #f8fafc; --card-bg: #ffffff; --text: #1e293b; --text-muted: #64748b; --border: #e2e8f0; }
+        :root {
+            --primary: #0f172a;
+            --primary-light: #1e293b;
+            --accent: #2563eb;
+            --accent-hover: #1d4ed8;
+            --bg: #f8fafc;
+            --card-bg: #ffffff;
+            --text: #0f172a;
+            --text-muted: #64748b;
+            --border: #e2e8f0;
+            --success: #10b981;
+        }
+
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Noto Sans JP', sans-serif; }
         body { background-color: var(--bg); color: var(--text); line-height: 1.6; }
-        header { background-color: var(--primary); color: white; padding: 1rem 2rem; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); }
-        .logo { font-size: 1.4rem; font-weight: 700; letter-spacing: 1px; color: #fff; display: flex; align-items: center; gap: 8px; }
-        .logo-badge { background: var(--accent); color: var(--primary); font-size: 0.75rem; padding: 2px 6px; border-radius: 4px; }
-        nav { display: flex; gap: 8px; }
-        nav button { background: none; border: none; color: #94a3b8; font-size: 0.95rem; font-weight: 500; cursor: pointer; padding: 8px 16px; border-radius: 6px; transition: all 0.2s; }
-        nav button.active, nav button:hover { color: white; background: var(--primary-light); }
-        .container { max-width: 850px; margin: 2rem auto; padding: 0 1rem; }
-        .tab-content { display: none; background: var(--card-bg); padding: 2.5rem; border-radius: 12px; border: 1px solid var(--border); box-shadow: 0 4px 12px rgba(0,0,0,0.03); }
-        .tab-content.active { display: block; }
-        h2 { font-size: 1.35rem; color: var(--primary); margin-bottom: 0.5rem; border-bottom: 2px solid var(--border); padding-bottom: 0.5rem; }
-        .sub-text { font-size: 0.88rem; color: var(--text-muted); margin-bottom: 1.5rem; }
-        .form-group { margin-bottom: 1.25rem; }
-        .form-group label { display: block; font-weight: 600; font-size: 0.9rem; margin-bottom: 6px; }
-        input[type="text"], select { width: 100%; padding: 11px; font-size: 0.95rem; border: 1px solid var(--border); border-radius: 6px; background: #fff; }
-        .tag-group { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 6px; }
-        .tag-label { display: flex; align-items: center; gap: 6px; background: #f1f5f9; padding: 6px 12px; border-radius: 20px; font-size: 0.85rem; cursor: pointer; border: 1px solid var(--border); }
-        .tag-label input { accent-color: var(--primary); }
-        button.btn { background: var(--primary); color: white; border: none; padding: 12px 20px; font-size: 0.95rem; font-weight: 600; border-radius: 6px; cursor: pointer; width: 100%; transition: background 0.2s; }
-        button.btn:hover { background: var(--primary-light); }
-        button.btn:disabled { background: #94a3b8 !important; cursor: not-allowed; }
-        .btn-red { background: #dc2626; margin-top: 15px; }
-        .btn-gray { background: #64748b; margin-top: 10px; }
-        .result-card { margin-top: 1.5rem; padding: 1.25rem; border: 1px solid var(--border); border-radius: 8px; background: #f8fafc; }
-        .status-badge { display: inline-block; background: #059669; color: white; padding: 4px 10px; border-radius: 20px; font-size: 0.85rem; font-weight: 700; }
-        .message-box { margin-top: 12px; padding: 12px; background: #eff6ff; border-left: 4px solid #2563eb; font-size: 0.9rem; border-radius: 0 4px 4px 0; }
-        .error-card { background: #fef2f2; border: 1px solid #fca5a5; color: #991b1b; padding: 1rem; border-radius: 8px; margin-top: 1.5rem; font-size: 0.95rem; line-height: 1.7; font-weight: 500; }
-        .slip-container { margin-top: 2rem; background: #fff; border: 2px solid var(--primary); border-radius: 8px; padding: 20px; }
-        .qr-box { text-align: center; background: #fafafa; padding: 15px; border: 1px solid var(--border); border-radius: 6px; margin-bottom: 15px; }
-        .qr-box img { width: 180px; height: 180px; }
-        .ship-history-item { background: #f8fafc; border: 1px solid var(--border); padding: 12px; border-radius: 6px; margin-bottom: 10px; font-size: 0.88rem; }
-        .pdf-container { margin-top: 1.5rem; background: #fff; border: 2px solid #333; box-shadow: 0 4px 10px rgba(0,0,0,0.15); padding: 20px; font-family: 'Yuji Syuku', serif; }
-        .pdf-header { text-align: center; border-bottom: 2px solid #333; padding-bottom: 10px; margin-bottom: 15px; font-size: 1.3rem; font-weight: bold; }
-        .pdf-body { font-size: 1rem; line-height: 1.8; }
-        .reason-box { margin: 12px 0; border: 1px solid #666; padding: 10px; background: #fffdfa; }
-        .stamp-area { display: flex; justify-content: space-between; align-items: flex-end; margin-top: 15px; border-top: 1px dashed #aaa; padding-top: 12px; }
-        .hanko { width: 55px; height: 55px; border: 2px solid #dc2626; border-radius: 50%; color: #dc2626; display: flex; align-items: center; justify-content: center; font-size: 1.1rem; font-weight: bold; transform: rotate(-10deg); font-family: 'Yuji Syuku', serif; }
-        
-        .history-box { margin-top: 1.5rem; padding: 1rem; background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 6px; }
-        .history-title { font-weight: 700; color: #166534; font-size: 0.88rem; margin-bottom: 0.5rem; }
-        .history-item { font-size: 0.82rem; color: #334155; padding: 4px 0; border-bottom: 1px dashed #cbd5e1; }
 
-        .timeline { margin-top: 1.5rem; border-left: 2px solid #cbd5e1; padding-left: 15px; }
-        .timeline-item { margin-bottom: 10px; color: #94a3b8; font-size: 0.88rem; }
+        header {
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+            color: white;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .logo { font-size: 1.5rem; font-weight: 900; letter-spacing: 1.5px; color: #fff; display: flex; align-items: center; gap: 10px; }
+        .logo-badge { background: linear-gradient(135deg, #2563eb, #3b82f6); color: white; font-size: 0.75rem; padding: 3px 8px; border-radius: 6px; font-weight: 700; }
+
+        nav { display: flex; gap: 6px; }
+        nav button {
+            background: transparent;
+            border: none;
+            color: #94a3b8;
+            font-size: 0.95rem;
+            font-weight: 700;
+            cursor: pointer;
+            padding: 10px 18px;
+            border-radius: 8px;
+            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        nav button.active, nav button:hover { color: white; background: rgba(255, 255, 255, 0.1); }
+
+        .container { max-width: 900px; margin: 2rem auto; padding: 0 1rem; }
+
+        .tab-content {
+            display: none;
+            background: var(--card-bg);
+            padding: 2.5rem;
+            border-radius: 16px;
+            border: 1px solid var(--border);
+            box-shadow: 0 10px 25px -5px rgba(0,0,0,0.05);
+            opacity: 0;
+            transform: translateY(10px);
+            transition: opacity 0.3s ease, transform 0.3s ease;
+        }
+        .tab-content.active { display: block; opacity: 1; transform: translateY(0); }
+
+        h2 { font-size: 1.4rem; color: var(--primary); margin-bottom: 0.5rem; border-bottom: 2px solid var(--border); padding-bottom: 0.6rem; font-weight: 900; }
+        .sub-text { font-size: 0.88rem; color: var(--text-muted); margin-bottom: 1.5rem; }
+
+        .form-group { margin-bottom: 1.25rem; }
+        .form-group label { display: block; font-weight: 700; font-size: 0.9rem; margin-bottom: 6px; }
+        input[type="text"], textarea, select {
+            width: 100%;
+            padding: 12px;
+            font-size: 0.95rem;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            background: #fff;
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+        input[type="text"]:focus, textarea:focus, select:focus {
+            outline: none;
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
+        }
+
+        .btn-group { display: flex; gap: 10px; margin-bottom: 1.5rem; }
+
+        button.btn {
+            background: var(--accent);
+            color: white;
+            border: none;
+            padding: 12px 22px;
+            font-size: 0.95rem;
+            font-weight: 700;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.2);
+        }
+        button.btn:hover { background: var(--accent-hover); transform: translateY(-1px); box-shadow: 0 6px 16px rgba(37, 99, 235, 0.3); }
+        button.btn-outline { background: transparent; color: var(--primary); border: 1.5px solid var(--border); box-shadow: none; }
+        button.btn-outline:hover { background: #f1f5f9; color: var(--primary); transform: none; }
+        button.btn-red { background: #ef4444; color: white; box-shadow: 0 4px 12px rgba(239, 68, 68, 0.2); }
+        button.btn-red:hover { background: #dc2626; }
+        button.btn:disabled { background: #94a3b8 !important; cursor: not-allowed; transform: none !important; box-shadow: none !important; }
+
+        .tag-group { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 6px; }
+        .tag-label { display: flex; align-items: center; gap: 6px; background: #f1f5f9; padding: 8px 14px; border-radius: 20px; font-size: 0.85rem; cursor: pointer; border: 1px solid var(--border); transition: background 0.2s; }
+        .tag-label:hover { background: #e2e8f0; }
+
+        .result-card {
+            margin-top: 1.5rem;
+            padding: 1.5rem;
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            background: #f8fafc;
+            animation: fadeIn 0.4s ease forwards;
+        }
+
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
+
+        .status-badge { display: inline-block; background: var(--success); color: white; padding: 4px 12px; border-radius: 20px; font-size: 0.85rem; font-weight: 700; }
+
+        .message-box { margin-top: 12px; padding: 12px; background: #eff6ff; border-left: 4px solid var(--accent); font-size: 0.9rem; border-radius: 0 6px 6px 0; }
+        .error-card { background: #fef2f2; border: 1px solid #fca5a5; color: #991b1b; padding: 1.25rem; border-radius: 12px; margin-top: 1.5rem; font-size: 0.95rem; line-height: 1.7; font-weight: 500; }
+
+        .slip-container { margin-top: 2rem; background: #fff; border: 2px solid var(--primary); border-radius: 12px; padding: 24px; box-shadow: 0 8px 20px rgba(0,0,0,0.06); }
+        .qr-box { text-align: center; background: #f8fafc; padding: 18px; border: 1px solid var(--border); border-radius: 10px; margin-bottom: 18px; }
+        .qr-box img { width: 190px; height: 190px; border-radius: 6px; }
+
+        .pdf-container { margin-top: 1.5rem; background: #fff; border: 2px solid #333; box-shadow: 0 6px 16px rgba(0,0,0,0.12); padding: 24px; font-family: 'Yuji Syuku', serif; }
+        .pdf-header { text-align: center; border-bottom: 2px solid #333; padding-bottom: 10px; margin-bottom: 15px; font-size: 1.3rem; font-weight: bold; }
+
+        .history-box { margin-top: 1.5rem; padding: 1.2rem; background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 10px; }
+        .history-title { font-weight: 700; color: #166534; font-size: 0.9rem; margin-bottom: 0.6rem; }
+        .history-item { font-size: 0.85rem; color: #334155; padding: 6px 0; border-bottom: 1px dashed #cbd5e1; }
+
+        .timeline { margin-top: 1.5rem; border-left: 3px solid #cbd5e1; padding-left: 18px; }
+        .timeline-item { margin-bottom: 12px; color: #94a3b8; font-size: 0.88rem; position: relative; }
+        .timeline-item::before { content: ''; position: absolute; left: -24px; top: 4px; width: 10px; height: 10px; border-radius: 50%; background: #cbd5e1; }
         .timeline-item.done { color: #1e293b; font-weight: 500; }
-        .timeline-item.current { color: #2563eb; font-weight: 700; }
+        .timeline-item.done::before { background: #64748b; }
+        .timeline-item.current { color: var(--accent); font-weight: 700; font-size: 0.95rem; }
+        .timeline-item.current::before { background: var(--accent); box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.2); }
+
         .info-table { width: 100%; border-collapse: collapse; margin-top: 1rem; }
-        .info-table th, .info-table td { border: 1px solid var(--border); padding: 10px 12px; font-size: 0.9rem; }
-        .info-table th { background: #f1f5f9; width: 30%; text-align: left; color: var(--primary); }
+        .info-table th, .info-table td { border: 1px solid var(--border); padding: 12px 14px; font-size: 0.9rem; }
+        .info-table th { background: #f1f5f9; width: 30%; text-align: left; color: var(--primary); font-weight: 700; }
+
+        .ship-history-item { background: #f8fafc; border: 1px solid var(--border); padding: 14px; border-radius: 10px; margin-bottom: 12px; font-size: 0.88rem; line-height: 1.7; }
+        .notice-info { background: #eff6ff; border: 1px solid #bfdbfe; color: #1e40af; padding: 12px; border-radius: 8px; font-size: 0.82rem; margin-top: 10px; line-height: 1.6; }
     </style>
 </head>
 <body>
 
     <header>
-        <div class="logo">大和運輸 <span class="logo-badge">公式</span></div>
+        <div class="logo">荷急運輸 <span class="logo-badge">Nikkyu Express</span></div>
         <nav>
             <button id="nav-top" class="active" onclick="showTab('top')">お荷物追跡</button>
             <button id="nav-ship" onclick="showTab('ship')">荷物を送る</button>
@@ -73,52 +169,40 @@
     <div class="container">
         <!-- 追跡タブ -->
         <div id="tab-top" class="tab-content active">
-            <h2>お荷物追跡</h2>
-            <p class="sub-text">お問い合わせ伝票番号を入力して配送状況をご確認いただけます。</p>
+            <h2>お荷物追跡サービス</h2>
+            <p class="sub-text">お問い合わせ伝票番号を入力してください。（複数追跡は最大5件まで可能）</p>
 
-            <div style="display:flex; gap:10px; margin-bottom: 1.5rem;">
-                <input type="text" id="trackingCode" placeholder="追跡番号を入力（例: AM123456）">
-                <button class="btn" style="width:120px;" onclick="startTracking()">追跡する</button>
+            <div id="singleTrackForm">
+                <div style="display:flex; gap:10px; margin-bottom: 1rem;">
+                    <input type="text" id="trackingCode" placeholder="追跡番号を入力（例: AM123456, EN998877, TM554433）">
+                    <button class="btn" style="width:130px; shrink:0;" onclick="startTracking()">追跡する</button>
+                </div>
             </div>
 
-            <div id="trackingResult" style="display: none;">
-                <div class="result-card">
-                    <div><strong>追跡番号：</strong> <span id="resCode"></span></div>
-                    <div><strong>現在の状況：</strong> <span id="resStatus" class="status-badge"></span></div>
-                    <div><strong>配達予定日：</strong> <span id="resDate"></span></div>
-
-                    <div id="driverMsgBox" class="message-box" style="display: none;">
-                        <strong>お知らせ：</strong> <span id="resMsg"></span>
-                    </div>
-
-                    <button id="confirmDeliveredBtn" class="btn btn-gray" style="display:none;" onclick="confirmDelivered()">配達確認（履歴から削除）</button>
+            <div id="multiTrackForm" style="display: none;">
+                <div style="margin-bottom: 1rem;">
+                    <textarea id="multiTrackingCodes" rows="4" placeholder="追跡番号を改行区切りで入力（最大5個まで）&#10;例：&#10;AM100001&#10;EN200002&#10;TM300003"></textarea>
+                    <button class="btn" style="width:100%; margin-top: 8px;" onclick="startMultiTracking()">まとめて一括追跡（最大5件）</button>
                 </div>
-
-                <!-- PDFエリア -->
-                <div id="pdfArea" class="pdf-container" style="display: none;">
-                    <div class="pdf-header" id="pdfTitle">ご不在連絡票（電子版PDF）</div>
-                    <div class="pdf-body" id="pdfBodyContent"></div>
-                </div>
-
-                <!-- リアルタイム変更履歴 -->
-                <div class="history-box">
-                    <div class="history-title">⏱️ リアルタイム更新履歴</div>
-                    <div id="historyLogs">ログ確認中...</div>
-                </div>
-
-                <!-- タイムライン -->
-                <div class="timeline" id="timelineArea"></div>
             </div>
+
+            <div class="btn-group">
+                <button id="modeSingleBtn" class="btn btn-outline" style="font-size: 0.85rem; padding: 8px 14px;" onclick="toggleTrackMode('single')">通常追跡</button>
+                <button id="modeMultiBtn" class="btn btn-outline" style="font-size: 0.85rem; padding: 8px 14px;" onclick="toggleTrackMode('multi')">複数追跡（最大5個）</button>
+            </div>
+
+            <!-- 追跡結果コンテナ（単一・複数対応） -->
+            <div id="trackingResultContainer"></div>
 
             <div id="trackingError" class="result-card" style="display: none; color: #dc2626;">
-                該当の追跡番号は見つかりませんでした。
+                該当の追跡番号は見つかりませんでした。番号をご確認の上再度お試しください。
             </div>
         </div>
 
         <!-- 荷物を送るタブ -->
         <div id="tab-ship" class="tab-content">
             <h2>荷物の発送申し込み</h2>
-            <p class="sub-text">受付窓口：<strong>磯子営業所持ち込み限定</strong>（営業時間: 8:00〜22:00 / 持ち込み締め切り: 22:00）</p>
+            <p class="sub-text">受付窓口：<strong>磯子営業所持ち込み限定</strong>（営業時間: 8:00〜22:00 / 締め切り: 22:00）</p>
 
             <form id="shippingForm" onsubmit="handleShipSubmit(event)">
                 <div class="form-group">
@@ -126,17 +210,35 @@
                     <select id="shipSize" required>
                         <option value="doc">簡易書類（50円〜300円）</option>
                         <option value="post">ポストサイズ（100円〜400円）</option>
-                        <option value="parcel">宅急便サイズ（300円〜900円）</option>
+                        <option value="parcel">宅配便サイズ（300円〜900円）</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>配送オプション・希望便</label>
+                    <select id="shipOption" onchange="toggleTimeSelect()" required>
+                        <option value="normal">通常便 (コード: AM)</option>
+                        <option value="express">お急ぎ優先便 (+100円 / コード: EN)</option>
+                        <option value="timed">日時指定便 (+150円 / コード: TM)</option>
+                    </select>
+                </div>
+
+                <div class="form-group" id="timeSlotGroup" style="display: none;">
+                    <label>お届け時間帯指定</label>
+                    <select id="shipTimeSlot">
+                        <option value="8:00-14:00">8:00 〜 14:00</option>
+                        <option value="15:00-18:00">15:00 〜 18:00</option>
+                        <option value="18:30-19:30">18:30 〜 19:30</option>
                     </select>
                 </div>
 
                 <div class="form-group">
                     <label>品名（具体的な内容物）</label>
-                    <input type="text" id="shipItemName" placeholder="例: 書類、服、小型電子機器など" required>
+                    <input type="text" id="shipItemName" placeholder="例: 書類、衣類、小型電子機器" required>
                 </div>
 
                 <div class="form-group">
-                    <label>取扱注意オプション</label>
+                    <label>取扱注意タグ</label>
                     <div class="tag-group">
                         <label class="tag-label"><input type="checkbox" value="ワレモノ注意"> ⚠️ 割れ物注意</label>
                         <label class="tag-label"><input type="checkbox" value="精密機器"> 💻 精密機器</label>
@@ -155,53 +257,59 @@
                     <input type="text" id="shipAddress" placeholder="例: 神奈川県横浜市磯子区..." required>
                 </div>
 
-                <button type="submit" class="btn">発送手続き（保護伝票・QR発行）</button>
+                <button type="submit" class="btn" style="width: 100%; margin-top: 10px;">発送手続き（保護伝票・暗号化QR発行）</button>
             </form>
 
             <div id="shipBusyError" class="error-card" style="display: none;">
-                現在大和運輸発送サイトの混雑によりコードの取得ができません。<br>
+                現在荷急運輸発送サイトの混雑によりコードの取得ができません。<br>
                 営業所に直接お越しいただくか、コード発送までいましばらくお待ちください。
             </div>
 
+            <!-- 発行完了・伝票・QRコード画面 -->
             <div id="shipResult" style="display: none;">
                 <div class="slip-container">
                     <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 2px dashed var(--border); padding-bottom: 12px; margin-bottom: 15px;">
-                        <div style="font-size: 1.1rem; font-weight: 700; color: var(--primary);">大和運輸 デジタル持ち込み発送票</div>
-                        <span style="font-size: 0.8rem; background: #e2e8f0; padding: 3px 8px; border-radius: 4px;">磯子営業所 持込専用</span>
+                        <div style="font-size: 1.15rem; font-weight: 900; color: var(--primary);">荷急運輸 デジタル持ち込み発送票</div>
+                        <span style="font-size: 0.8rem; background: #e2e8f0; padding: 4px 10px; border-radius: 6px; font-weight: 700;">磯子営業所 持込専用</span>
                     </div>
 
                     <div class="qr-box">
                         <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 8px;">営業所窓口でこちらのQRを提示してください</p>
                         <img id="qrImage" src="" alt="発送受付QRコード">
-                        <div style="font-size: 0.75rem; color: #dc2626; margin-top: 4px;">※一般カメラで読み取られても暗号化文字のみが表示されます</div>
-                        <div style="font-size: 1.2rem; font-weight: bold; color: var(--primary); margin-top: 5px;" id="generatedCode">----</div>
+                        <div style="font-size: 0.75rem; color: #dc2626; margin-top: 6px;">※QRコードには配達方法・送料情報が含まれています</div>
+                        <div style="font-size: 1.3rem; font-weight: 900; color: var(--accent); margin-top: 6px;" id="generatedCode">----</div>
                     </div>
 
-                    <div style="font-size: 0.9rem; line-height: 1.8; background: #f8fafc; padding: 12px; border-radius: 6px;">
+                    <div style="font-size: 0.9rem; line-height: 1.9; background: #f8fafc; padding: 16px; border-radius: 8px;">
+                        <div>■ <strong>配送種別：</strong> <span id="resOptionText">-</span></div>
                         <div>■ <strong>品名：</strong> <span id="resItemName">-</span></div>
                         <div>■ <strong>取扱注意：</strong> <span id="resTags">-</span></div>
                         <div>■ <strong>お届け先：</strong> <span id="resAddress">-</span></div>
-                        <div>■ <strong>適用送料（税込）：</strong> <span id="calcPrice" style="color: #dc2626; font-weight: bold;">0円</span></div>
-                        <div>■ <strong>最短お届け予定日：</strong> <strong id="calcDeliveryDate">-</strong></div>
+                        <div>■ <strong>適用送料（税込）：</strong> <span id="calcPrice" style="color: #dc2626; font-weight: bold; font-size: 1.1rem;">0円</span></div>
+                        <div>■ <strong>お届け予定日時：</strong> <strong id="calcDeliveryDate" style="color: var(--accent);">-</strong></div>
+                    </div>
+
+                    <div class="notice-info">
+                        ※お急ぎ便・日時指定便は必ず予定日通り配達されることを保証されるサービス・オプションです。沖縄、離島、北海道に関しては、お届けに7日前後かかる場合がございます。
                     </div>
                 </div>
             </div>
 
-            <div style="margin-top: 2rem;">
-                <h3 style="font-size: 1.1rem; color: var(--primary); margin-bottom: 0.5rem;">📜 過去の発送申し込み履歴</h3>
+            <div style="margin-top: 2.5rem;">
+                <h3 style="font-size: 1.1rem; color: var(--primary); margin-bottom: 0.8rem; font-weight: 700;">📜 過去の発送申し込み履歴</h3>
                 <div id="shipHistoryContainer">履歴はありません。</div>
             </div>
         </div>
 
-        <!-- 営業所・会社概要タブ (所在地なし) -->
+        <!-- 営業所・会社概要タブ -->
         <div id="tab-company" class="tab-content">
             <h2>営業所・会社概要</h2>
-            <p class="sub-text">大和運輸の拠点情報および会社情報です。</p>
+            <p class="sub-text">荷急運輸（にきゅううんゆ）の拠点情報およびサービス概要です。</p>
 
             <table class="info-table">
                 <tr>
                     <th>会社名・屋号</th>
-                    <td>大和運輸 株式会社 (Yamato Express Co., Ltd.)</td>
+                    <td>荷急運輸 株式会社 (Nikkyu Express Co., Ltd.)</td>
                 </tr>
                 <tr>
                     <th>管轄営業所</th>
@@ -213,11 +321,11 @@
                 </tr>
                 <tr>
                     <th>事業内容</th>
-                    <td>一般貨物自動車運送事業、宅配便発送受託業務、荷物追跡システム運用</td>
+                    <td>一般貨物自動車運送事業、スピード宅配便発送受託業務、オンライン荷物追跡システム運用</td>
                 </tr>
                 <tr>
                     <th>代表問い合わせ</th>
-                    <td><a href="mailto:ased8331@gmail.com" style="color: var(--primary);">ased8331@gmail.com</a></td>
+                    <td><a href="mailto:ased8331@gmail.com" style="color: var(--accent); font-weight: bold;">ased8331@gmail.com</a></td>
                 </tr>
             </table>
         </div>
@@ -237,7 +345,7 @@
             16: "配達準備", 17: "配達中", 18: "配達済み"
         };
 
-        // AMコード国内発送（1〜5）
+        // AM/EN/TMコード国内発送（1〜5）
         const domesticStatusMaster = {
             1: "営業所保管中",
             2: "輸送中",
@@ -246,13 +354,14 @@
             5: "配達済み"
         };
 
-        let currentCode = null;
+        let currentCodes = [];
         let timer = null;
         let lastKnownState = {};
         let historyStore = {};
 
         document.addEventListener("DOMContentLoaded", () => {
             renderShipHistory();
+            toggleTrackMode('single');
         });
 
         function showTab(tabName) {
@@ -262,33 +371,33 @@
             document.getElementById('nav-' + tabName).classList.add('active');
         }
 
-        function formatDate(d) {
-            return `${d.getFullYear()}年${d.getMonth() + 1}月${d.getDate()}日`;
+        function toggleTrackMode(mode) {
+            const singleForm = document.getElementById('singleTrackForm');
+            const multiForm = document.getElementById('multiTrackForm');
+            const singleBtn = document.getElementById('modeSingleBtn');
+            const multiBtn = document.getElementById('modeMultiBtn');
+
+            if (mode === 'single') {
+                singleForm.style.display = "block";
+                multiForm.style.display = "none";
+                singleBtn.classList.remove('btn-outline'); singleBtn.classList.add('btn');
+                multiBtn.classList.remove('btn'); multiBtn.classList.add('btn-outline');
+            } else {
+                singleForm.style.display = "none";
+                multiForm.style.display = "block";
+                multiBtn.classList.remove('btn-outline'); multiBtn.classList.add('btn');
+                singleBtn.classList.remove('btn'); singleBtn.classList.add('btn-outline');
+            }
         }
 
-        function calcDeliveryDate(code, statusNum) {
-            const isAM = code.startsWith("AM");
-            const maxStep = isAM ? 5 : 18;
-            if (statusNum === maxStep) return "配達完了";
+        function toggleTimeSelect() {
+            const opt = document.getElementById('shipOption').value;
+            const group = document.getElementById('timeSlotGroup');
+            group.style.display = (opt === 'timed') ? 'block' : 'none';
+        }
 
-            const now = new Date();
-            if (isAM) {
-                if (statusNum === 3) {
-                    if (now.getHours() < 13) {
-                        return `${formatDate(now)} (本日お届け予定)`;
-                    } else {
-                        const tomorrow = new Date(now); tomorrow.setDate(now.getDate() + 1);
-                        return `${formatDate(tomorrow)} (明日お届け予定)`;
-                    }
-                }
-                const d1 = new Date(now); d1.setDate(now.getDate() + 1);
-                const d2 = new Date(now); d2.setDate(now.getDate() + 3);
-                return `${formatDate(d1)} 〜 ${formatDate(d2)}`;
-            } else {
-                const d1 = new Date(now); d1.setDate(now.getDate() + 7);
-                const d2 = new Date(now); d2.setDate(now.getDate() + 21);
-                return `${formatDate(d1)} 〜 ${formatDate(d2)}`;
-            }
+        function formatDate(d) {
+            return `${d.getFullYear()}年${d.getMonth() + 1}月${d.getDate()}日`;
         }
 
         async function fetchSpreadsheetData() {
@@ -302,188 +411,154 @@
             }
         }
 
-        async function syncAndRender() {
-            if (!currentCode) return;
+        function startTracking() {
+            const input = document.getElementById('trackingCode').value.trim().toUpperCase();
+            if (!input) return;
+            currentCodes = [input];
+            syncAndRender();
+            if (timer) clearInterval(timer);
+            timer = setInterval(syncAndRender, 3000);
+        }
 
-            const history = JSON.parse(localStorage.getItem('tracking_history') || '{}');
-            if (history[currentCode] && history[currentCode].deleted) {
-                document.getElementById('trackingResult').style.display = "none";
-                document.getElementById('trackingError').style.display = "block";
-                return;
-            }
+        function startMultiTracking() {
+            const text = document.getElementById('multiTrackingCodes').value;
+            const codes = text.split('\n').map(c => c.trim().toUpperCase()).filter(c => c.length > 0).slice(0, 5);
+            if (codes.length === 0) return;
+            currentCodes = codes;
+            syncAndRender();
+            if (timer) clearInterval(timer);
+            timer = setInterval(syncAndRender, 3000);
+        }
+
+        async function syncAndRender() {
+            if (currentCodes.length === 0) return;
 
             const rows = await fetchSpreadsheetData();
+            const container = document.getElementById('trackingResultContainer');
+            const errorDiv = document.getElementById('trackingError');
+
             if (!rows) return;
 
-            let foundItem = null;
-            rows.forEach(row => {
-                const c = row.c;
-                if (c && c[0] && c[0].v) {
-                    const code = String(c[0].v).trim().toUpperCase();
-                    if (code === currentCode) {
-                        let bVal = 1;
-                        if (c[1] && c[1].v !== null && c[1].v !== "") {
-                            const parsed = parseInt(c[1].v, 10);
-                            if (!isNaN(parsed)) bVal = parsed;
-                        }
-                        let cVal = (c[2] && c[2].v !== null) ? String(c[2].v) : "";
-                        foundItem = { b: bVal, c: cVal };
-                    }
-                }
-            });
+            container.innerHTML = "";
+            let foundAny = false;
 
-            if (!foundItem) {
-                document.getElementById('trackingResult').style.display = "none";
-                document.getElementById('trackingError').style.display = "block";
-                return;
+            for (let code of currentCodes) {
+                const history = JSON.parse(localStorage.getItem('tracking_history') || '{}');
+                if (history[code] && history[code].deleted) continue;
+
+                let foundItem = null;
+                rows.forEach(row => {
+                    const c = row.c;
+                    if (c && c[0] && c[0].v) {
+                        const rowCode = String(c[0].v).trim().toUpperCase();
+                        if (rowCode === code) {
+                            let bVal = 1;
+                            if (c[1] && c[1].v !== null && c[1].v !== "") {
+                                const parsed = parseInt(c[1].v, 10);
+                                if (!isNaN(parsed)) bVal = parsed;
+                            }
+                            let cVal = (c[2] && c[2].v !== null) ? String(c[2].v) : "";
+                            foundItem = { b: bVal, c: cVal };
+                        }
+                    }
+                });
+
+                if (foundItem) {
+                    foundAny = true;
+                    renderSingleCard(code, foundItem, container);
+                }
             }
 
-            document.getElementById('trackingError').style.display = "none";
-            document.getElementById('trackingResult').style.display = "block";
+            if (!foundAny) {
+                errorDiv.style.display = "block";
+            } else {
+                errorDiv.style.display = "none";
+            }
+        }
 
-            const isAM = currentCode.startsWith("AM");
-            const master = isAM ? domesticStatusMaster : globalStatusMaster;
-            const maxStep = isAM ? 5 : 18;
+        function renderSingleCard(code, foundItem, container) {
+            const isDomestic = code.startsWith("AM") || code.startsWith("EN") || code.startsWith("TM");
+            const master = isDomestic ? domesticStatusMaster : globalStatusMaster;
+            const maxStep = isDomestic ? 5 : 18;
 
             const statusNum = Math.min(Math.max(foundItem.b, 1), maxStep);
             const statusText = master[statusNum] || master[1];
             const msg = foundItem.c;
 
-            // リアルタイムログ更新処理
-            if (!historyStore[currentCode]) historyStore[currentCode] = [];
-            const prevState = lastKnownState[currentCode];
+            if (!historyStore[code]) historyStore[code] = [];
+            const prevState = lastKnownState[code];
             if (!prevState || prevState.b !== statusNum || prevState.c !== msg) {
                 const nowStr = new Date().toLocaleString('ja-JP');
                 let logText = `[${nowStr}] Step ${statusNum}: ${statusText}`;
                 if (msg) logText += ` (${msg})`;
-                historyStore[currentCode].unshift({ text: logText });
-                lastKnownState[currentCode] = { b: statusNum, c: msg };
+                historyStore[code].unshift({ text: logText });
+                lastKnownState[code] = { b: statusNum, c: msg };
             }
 
-            document.getElementById('resCode').innerText = currentCode;
-            document.getElementById('resStatus').innerText = statusText;
-            document.getElementById('resDate').innerText = calcDeliveryDate(currentCode, statusNum);
+            const card = document.createElement('div');
+            card.className = 'result-card';
 
-            // 履歴ログ表示
-            document.getElementById('historyLogs').innerHTML = historyStore[currentCode]
-                .map(item => `<div class="history-item">${item.text}</div>`)
-                .join('');
-
-            // 完了時削除タイマー (AM等の配達完了時)
-            if (statusNum === maxStep) {
-                document.getElementById('confirmDeliveredBtn').style.display = "block";
-                if (!history[currentCode]) {
-                    history[currentCode] = { deliveredAt: new Date().getTime() };
-                    localStorage.setItem('tracking_history', JSON.stringify(history));
-                } else if (history[currentCode].deliveredAt) {
-                    const diffHours = (new Date().getTime() - history[currentCode].deliveredAt) / (1000 * 60 * 60);
-                    if (diffHours >= 48) {
-                        confirmDelivered();
-                        return;
-                    }
-                }
-            } else {
-                document.getElementById('confirmDeliveredBtn').style.display = "none";
-            }
-
-            // メッセージ & PDF条件判定
-            const msgBox = document.getElementById('driverMsgBox');
-            const pdfArea = document.getElementById('pdfArea');
-            const pdfTitle = document.getElementById('pdfTitle');
-            const pdfContent = document.getElementById('pdfBodyContent');
-
-            if (msg.includes("サイズ問題")) {
-                msgBox.style.display = "block";
-                msgBox.innerText = "サイズオーバーのため、返送致します。";
-                pdfArea.style.display = "block";
-                pdfTitle.innerText = "返送通知書（サイズ規定オーバー）";
-                pdfContent.innerHTML = `
-                    お荷物（<b>${currentCode}</b>）は規定サイズを超えているため、差出人様へ返送手続きを行っております。
-                    <div class="stamp-area">
-                        <div>受付店舗：通販サイト窓口</div>
-                        <div class="hanko">大和</div>
-                    </div>`;
-            } else if (msg.includes("宛先問題")) {
-                msgBox.style.display = "block";
-                msgBox.innerText = "住所不明等の理由により、現在発送できておりません。営業所で保管中です。";
-                pdfArea.style.display = "block";
-                pdfTitle.innerText = "発送保留通知";
-                pdfContent.innerHTML = `
-                    お荷物（<b>${currentCode}</b>）は宛先不備のため営業所にて保管中です。
-                    <button id="returnBtn" class="btn btn-red" onclick="executeReturnOnce()">返送手続きを実行する</button>`;
-            } else if (msg.includes("不在") || msg.includes("ご不在")) {
-                msgBox.style.display = "none";
-                pdfArea.style.display = "block";
-                pdfTitle.innerText = "ご不在連絡票（電子版PDF）";
-                pdfContent.innerHTML = `
-                    お荷物（<b>${currentCode}</b>）はご不在のため持ち戻りいたしました。
-                    <div class="reason-box">
-                        <strong>【持ち戻り理由】</strong><br>
-                        （ 〇 ） ご不在<br>
-                        （ ） 住所不明<br>
-                        （ ） 受取辞退
-                    </div>
-                    <button id="redeliveryBtn" class="btn btn-red" onclick="executeRedeliveryOnce()">再配達を依頼する</button>`;
-            } else {
-                msgBox.style.display = msg ? "block" : "none";
-                if (msg) msgBox.innerText = msg;
-                pdfArea.style.display = "none";
-            }
-
-            // タイムライン描画
-            let html = "";
+            let timelineHtml = "";
             for (let i = 1; i <= maxStep; i++) {
                 let cls = (i < statusNum) ? "timeline-item done" : (i === statusNum) ? "timeline-item current" : "timeline-item";
-                html += `<div class="${cls}">Step ${i}: ${master[i]}</div>`;
+                timelineHtml += `<div class="${cls}">Step ${i}: ${master[i]}</div>`;
             }
-            document.getElementById('timelineArea').innerHTML = html;
+
+            let logsHtml = historyStore[code].map(item => `<div class="history-item">${item.text}</div>`).join('');
+
+            let pdfBlockHtml = "";
+            let msgBoxHtml = msg ? `<div class="message-box"><strong>お知らせ：</strong> ${msg}</div>` : "";
+
+            if (msg.includes("不在") || msg.includes("ご不在")) {
+                pdfBlockHtml = `
+                    <div class="pdf-container">
+                        <div class="pdf-header">ご不在連絡票（電子版PDF）</div>
+                        <div>お荷物（<b>${code}</b>）はご不在のため持ち戻りいたしました。</div>
+                        <button id="redel_${code}" class="btn btn-red" style="margin-top:10px;" onclick="executeRedeliveryOnce('${code}')">再配達を依頼する</button>
+                    </div>`;
+            } else if (msg.includes("宛先問題")) {
+                pdfBlockHtml = `
+                    <div class="pdf-container">
+                        <div class="pdf-header">発送保留通知</div>
+                        <div>お荷物（<b>${code}</b>）は宛先不備のため営業所にて保管中です。</div>
+                        <button id="ret_${code}" class="btn btn-red" style="margin-top:10px;" onclick="executeReturnOnce('${code}')">返送手続きを実行する</button>
+                    </div>`;
+            }
+
+            card.innerHTML = `
+                <div><strong>追跡番号：</strong> <span style="font-size:1.1rem; font-weight:bold; color:var(--accent);">${code}</span></div>
+                <div style="margin-top:4px;"><strong>現在の状況：</strong> <span class="status-badge">${statusText}</span></div>
+
+                ${msgBoxHtml}
+                ${pdfBlockHtml}
+
+                <div class="history-box">
+                    <div class="history-title">⏱️ リアルタイム更新履歴</div>
+                    <div>${logsHtml}</div>
+                </div>
+
+                <div class="timeline">${timelineHtml}</div>
+            `;
+
+            container.appendChild(card);
         }
 
-        // 1回だけ実行可能な返送手続き
-        function executeReturnOnce() {
-            const btn = document.getElementById('returnBtn');
-            if (btn) {
-                btn.disabled = true;
-                btn.innerText = "返送依頼済み";
-            }
+        function executeReturnOnce(code) {
+            const btn = document.getElementById(`ret_${code}`);
+            if (btn) { btn.disabled = true; btn.innerText = "返送依頼済み"; }
             const nowStr = new Date().toLocaleString('ja-JP');
-            historyStore[currentCode].unshift({ text: `[${nowStr}] 差出人様への返送手続きを受け付けました。` });
-            document.getElementById('historyLogs').innerHTML = historyStore[currentCode]
-                .map(item => `<div class="history-item">${item.text}</div>`)
-                .join('');
+            historyStore[code].unshift({ text: `[${nowStr}] 差出人様への返送手続きを受け付けました。` });
+            syncAndRender();
             alert("返送リクエストを受け付けました。");
         }
 
-        // 1回だけ実行可能な再配達依頼
-        function executeRedeliveryOnce() {
-            const btn = document.getElementById('redeliveryBtn');
-            if (btn) {
-                btn.disabled = true;
-                btn.innerText = "再配達依頼済み";
-            }
+        function executeRedeliveryOnce(code) {
+            const btn = document.getElementById(`redel_${code}`);
+            if (btn) { btn.disabled = true; btn.innerText = "再配達依頼済み"; }
             const nowStr = new Date().toLocaleString('ja-JP');
-            historyStore[currentCode].unshift({ text: `[${nowStr}] お客様より再配達の依頼を受付しました。` });
-            document.getElementById('historyLogs').innerHTML = historyStore[currentCode]
-                .map(item => `<div class="history-item">${item.text}</div>`)
-                .join('');
-            alert("再配達を承りました。");
-        }
-
-        function confirmDelivered() {
-            const history = JSON.parse(localStorage.getItem('tracking_history') || '{}');
-            history[currentCode] = { deleted: true };
-            localStorage.setItem('tracking_history', JSON.stringify(history));
-            alert("配達確認が完了しました。この履歴を削除します。");
-            document.getElementById('trackingResult').style.display = "none";
-        }
-
-        function startTracking() {
-            const input = document.getElementById('trackingCode').value.trim().toUpperCase();
-            if (!input) return;
-            currentCode = input;
+            historyStore[code].unshift({ text: `[${nowStr}] お客様より再配達の依頼を受付しました。` });
             syncAndRender();
-            if (timer) clearInterval(timer);
-            timer = setInterval(syncAndRender, 2000);
+            alert("再配達を承りました。");
         }
 
         function renderShipHistory() {
@@ -497,10 +572,11 @@
 
             container.innerHTML = history.map(item => `
                 <div class="ship-history-item">
-                    <div><strong>追跡コード：</strong> ${item.code} （申込日時: ${item.date}）</div>
+                    <div><strong>追跡コード：</strong> <span style="color:var(--accent); font-weight:bold;">${item.code}</span> （申込: ${item.date}）</div>
+                    <div><strong>配送種別：</strong> ${item.optionText}</div>
                     <div><strong>品名：</strong> ${item.itemName} / <strong>取扱注意：</strong> ${item.tags}</div>
                     <div><strong>お届け先：</strong> ${item.address}</div>
-                    <div><strong>送料：</strong> ${item.price} / <strong>最短予定日：</strong> ${item.deliveryDate}</div>
+                    <div><strong>送料：</strong> ${item.price} / <strong>お届け予定：</strong> ${item.deliveryDate}</div>
                 </div>
             `).join('');
         }
@@ -511,12 +587,19 @@
             document.getElementById('shipResult').style.display = "none";
 
             const size = document.getElementById('shipSize').value;
+            const option = document.getElementById('shipOption').value;
+            const timeSlot = document.getElementById('shipTimeSlot').value;
             const itemName = document.getElementById('shipItemName').value.trim();
             const zip = document.getElementById('shipZip').value.trim();
             const address = document.getElementById('shipAddress').value.trim();
 
             const selectedTags = [];
             document.querySelectorAll('.tag-group input:checked').forEach(cb => selectedTags.push(cb.value));
+
+            // コード接頭辞の決定
+            let prefix = "AM";
+            if (option === 'express') prefix = "EN";
+            if (option === 'timed') prefix = "TM";
 
             const rows = await fetchSpreadsheetData();
             let allocatedCode = null;
@@ -526,7 +609,7 @@
                     const c = row.c;
                     if (c && c[0] && c[0].v) {
                         const codeStr = String(c[0].v).trim().toUpperCase();
-                        if (codeStr.startsWith("AM")) {
+                        if (codeStr.startsWith(prefix)) {
                             const hasB = c[1] && c[1].v !== null && c[1].v !== "";
                             const hasC = c[2] && c[2].v !== null && c[2].v !== "";
                             if (!hasB && !hasC) {
@@ -543,54 +626,86 @@
                 return;
             }
 
-            const today = new Date();
-            let price = 0;
-            let deliveryDate = new Date(today);
+            const now = new Date();
+            const currentHour = now.getHours();
+
+            let basePrice = (size === 'doc') ? 150 : (size === 'post') ? 250 : 600;
+            let optionPrice = (option === 'express') ? 100 : (option === 'timed') ? 150 : 0;
+            let totalPrice = basePrice + optionPrice;
 
             const isIsogoZone = address.includes("磯子区") || address.includes("磯子");
-            const isKanagawaPref = address.includes("神奈川") || address.includes("横浜");
+            const isCityZone = address.includes("横浜市") || isIsogoZone;
+            const isKanagawaPref = address.includes("神奈川") || isCityZone;
 
-            if (isIsogoZone) {
-                price = (size === 'doc') ? 50 : (size === 'post') ? 100 : 300;
-                deliveryDate.setDate(today.getDate() + 1);
-            } else if (isKanagawaPref) {
-                price = (size === 'doc') ? 150 : (size === 'post') ? 250 : 600;
-                deliveryDate.setDate(today.getDate() + 2);
+            let deliveryText = "";
+
+            if (option === 'express') {
+                // お急ぎ便
+                if (isIsogoZone && currentHour < 12) {
+                    deliveryText = `${formatDate(now)} (最短当日お届け可能)`;
+                } else if (isCityZone && currentHour < 12) {
+                    const d = new Date(now); d.setDate(now.getDate() + 2);
+                    deliveryText = `${formatDate(d)} (翌々日お届け)`;
+                } else {
+                    const d = new Date(now); d.setDate(now.getDate() + 3);
+                    deliveryText = `${formatDate(d)} (明々後日お届け)`;
+                }
+            } else if (option === 'timed') {
+                // 日時指定便
+                let d = new Date(now);
+                if (isIsogoZone && currentHour < 17) {
+                    d.setDate(now.getDate() + 1);
+                    deliveryText = `${formatDate(d)} 14:00〜 (${timeSlot} 指定)`;
+                } else if (isKanagawaPref && currentHour < 17) {
+                    d.setDate(now.getDate() + 2);
+                    deliveryText = `${formatDate(d)} 15:00〜 (${timeSlot} 指定)`;
+                } else if (currentHour < 12) {
+                    d.setDate(now.getDate() + 3);
+                    deliveryText = `${formatDate(d)} 12:00〜 (${timeSlot} 指定)`;
+                } else {
+                    d.setDate(now.getDate() + 4);
+                    deliveryText = `${formatDate(d)} (${timeSlot} 指定)`;
+                }
             } else {
-                price = (size === 'doc') ? 300 : (size === 'post') ? 400 : 900;
-                deliveryDate.setDate(today.getDate() + 4);
+                // 通常便
+                const d1 = new Date(now); d1.setDate(now.getDate() + 1);
+                const d2 = new Date(now); d2.setDate(now.getDate() + 3);
+                deliveryText = `${formatDate(d1)} 〜 ${formatDate(d2)}`;
             }
 
+            const optionLabel = (option === 'express') ? "お急ぎ優先便" : (option === 'timed') ? `日時指定便 (${timeSlot})` : "通常便";
             const tagsText = selectedTags.length > 0 ? selectedTags.join(", ") : "指定なし";
-            const deliveryDateText = `${formatDate(deliveryDate)} (${isIsogoZone ? '区内翌日便' : isKanagawaPref ? '県内便' : '県外便'})`;
 
-            const rawDetails = `[大和運輸 配送伝票]\n追跡番号: ${allocatedCode}\n品名: ${itemName}\n取扱注意: ${tagsText}\n〒: ${zip}\n住所: ${address}\n送料: ${price}円`;
+            // QRデータに配達方法・送料も含めて暗号化
+            const rawDetails = `[荷急運輸 配送伝票]\n追跡番号: ${allocatedCode}\n配達方法: ${optionLabel}\n品名: ${itemName}\n取扱注意: ${tagsText}\n〒: ${zip}\n住所: ${address}\n送料: ${totalPrice}円`;
             
             let base64 = btoa(unescape(encodeURIComponent(rawDetails)));
-            let encryptedStr = "YAMATO_SEC::";
+            let encryptedStr = "NIKKYU_SEC::";
             for (let i = 0; i < base64.length; i++) {
                 encryptedStr += String.fromCharCode(base64.charCodeAt(i) + SECRET_KEY);
             }
 
-            const qrApiUrl = `https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=${encodeURIComponent(encryptedStr)}`;
+            const qrApiUrl = `https://api.qrserver.com/v1/create-qr-code/?size=190x190&data=${encodeURIComponent(encryptedStr)}`;
 
             document.getElementById('generatedCode').innerText = allocatedCode;
             document.getElementById('qrImage').src = qrApiUrl;
+            document.getElementById('resOptionText').innerText = optionLabel;
             document.getElementById('resItemName').innerText = itemName;
             document.getElementById('resTags').innerText = tagsText;
             document.getElementById('resAddress').innerText = address;
-            document.getElementById('calcPrice').innerText = `${price}円`;
-            document.getElementById('calcDeliveryDate').innerText = deliveryDateText;
+            document.getElementById('calcPrice').innerText = `${totalPrice}円`;
+            document.getElementById('calcDeliveryDate').innerText = deliveryText;
             
             document.getElementById('shipResult').style.display = "block";
 
             const newHistoryItem = {
                 code: allocatedCode,
+                optionText: optionLabel,
                 itemName: itemName,
                 tags: tagsText,
                 address: address,
-                price: `${price}円`,
-                deliveryDate: deliveryDateText,
+                price: `${totalPrice}円`,
+                deliveryDate: deliveryText,
                 date: new Date().toLocaleString('ja-JP')
             };
 
